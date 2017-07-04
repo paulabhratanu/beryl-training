@@ -1,0 +1,16 @@
+git --version
+git config --global user.name "abc
+git config --global user.email "abc@gmail.com"
+git help config
+git init ->initialize an empty repo(.git)
+rm -rf git ->remove(.git)
+git status ->list the files
+touch .gitignore ->create a gitignore file and add the hidden files
+git add -A  ->add everything into the staging area
+git reset   ->remove everything from the staging area
+git commit -m "initial commit"
+git log ->details about the commit
+git <clone> <where to clone> ->cloning a repo
+git diff ->changes in the repo
+git push -u origin
+git rm --cached file1.txt

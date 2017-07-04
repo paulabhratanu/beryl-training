@@ -1,0 +1,9 @@
+nano filename
+ctrl+g ->see help
+ctrl+x ->exit help
+ctrl+o ->to save the file
+ctrl+r ->append two files
+Ctrl+^ ->select
+alt+^  ->copy
+ctrl+k ->cut
+ctrl+u ->paste
