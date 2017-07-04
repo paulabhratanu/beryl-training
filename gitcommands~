@@ -17,5 +17,3 @@ git pull origin master
 git rm --cached file1.txt
 git branch <branch name> ->create another branch
 git checkout tree
-git branch -d <branch name>   ->delete the branch
-
