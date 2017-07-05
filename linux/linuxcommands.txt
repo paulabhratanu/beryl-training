@@ -104,3 +104,9 @@ scp -v source_file_name username@destination_host:destination_folder
 
 command >> file.txt
 
+#pipes
+
+ls | head -3 ->list only 3 files
+ls | head -3 | tail -1 ->list only the last file
+ls | head -3 | tail -1 > myoutput ->output of command into the file
+
