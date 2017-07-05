@@ -16,6 +16,7 @@ git remote add origin https://github.com/paulabhratanu/df.git
 git push -u origin
 git pull origin master
 git rm --cached file1.txt
+git rm -r --cached FolderName
 git branch <branch name> ->create another branch
 git checkout tree
 git branch -d <branch name>   ->delete the branch
