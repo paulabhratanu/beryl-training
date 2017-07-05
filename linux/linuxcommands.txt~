@@ -100,7 +100,3 @@ scp -v source_file_name username@destination_host:destination_folder
 -l 400 ->limited bandwidth use
 -P port no ->specific port to use
 
-#output of a command into a file
-
-command >> file.txt
-
