@@ -10,6 +10,8 @@ ls -i ->print the index number of each file
 ls -r ->reverse order while sorting
 ls -Z ->print any security context of each file
 ls -1 ->list one file per line
+ls ~  ->list all contents of home directory
+ls ~/.. ->list root name
 
 #change directory
 
@@ -109,4 +111,37 @@ command >> file.txt
 ls | head -3 ->list only 3 files
 ls | head -3 | tail -1 ->list only the last file
 ls | head -3 | tail -1 > myoutput ->output of command into the file
+
+#write the contents of a file into a screen
+
+less 
+
+#for searching phrase or pattern
+
+grep string file.txt
+grep -i string file.txt ->to ignore lower/uppercase
+grep -i 'def solve(a)' balancedarray.rb ->search the whole string
+grep -v 'def solve(a)' balancedarray.rb ->show all lines except this 'def solve(a)'
+-n ->print each line with line number
+
+#words count
+
+wc -w file.txt ->no of words in file
+wc -l file.txt ->no of lines in file
+-c  ->bytes count
+-m  ->character count
+
+#sort the files alphabatically
+
+sort file.txt
+
+#wildcards
+
+ls a* ->list all files in current directory starting with a
+ls *a ->all files in current directory ending with a
+ls *.rb ->files that end with rb
+
+#check the exact name of a command
+
+apropos command 
 
