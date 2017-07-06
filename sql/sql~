@@ -1,0 +1,126 @@
+#create database
+
+CREATE DATABASE databasename;
+use databasename;
+show tables;
+drop database databasename;
+desc tablename;
+
+#create table
+
+CREATE TABLE tutorials_tbl(
+   -> tutorial_id INT NOT NULL AUTO_INCREMENT,
+   -> tutorial_title VARCHAR(100) NOT NULL,
+   -> tutorial_author VARCHAR(40) NOT NULL,
+   -> submission_date DATE,
+   -> PRIMARY KEY ( tutorial_id )
+   -> );
+#primary and foreign key
+
+alter table employee ADD FOREIGN KEY (department_id) REFERENCES department(department_id);
+
+ALTER TABLE employee ADD PRIMARY KEY (ID);
+#drop table
+
+DROP TABLE tablename;
+
+#insert
+
+insert into department values(1000,'sales',100);
+
+#select
+
+select * from tablename;
+select name from employee where age=20;
+select age from employee where name='amit';
+select name from employee where age<40;
+select name from employee where age!=40;
+select name from employee where age=20 and retirement=22;
+SELECT DISTINCT name FROM employee;
+SELECT * FROM employee WHERE age BETWEEN 10 AND 20;
+SELECT * FROM employee WHERE name IN ('priya', 'rahul'); ->either rahul or priya;
+#update
+
+UPDATE employee SET department_id = 1000 WHERE id = 100;
+
+#delete
+
+DELETE FROM employee WHERE id=100;
+
+#like
+
+SELECT * from employee WHERE name LIKE '%ul'
+WHERE CustomerName LIKE 'a%'  ->Finds any values that starts with "a"
+WHERE CustomerName LIKE '%a'  ->Finds any values that ends with "a"
+WHERE CustomerName LIKE '%or%' -> Finds any values that have "or" in any position
+WHERE CustomerName LIKE '_r%' ->Finds any values that have "r" in the second position
+WHERE CustomerName LIKE 'a_%_%' ->Finds any values that starts with "a" and are at least 3 characters in length
+WHERE ContactName LIKE 'a%o' 	->Finds any values that starts with "a" and ends with "o"
+
+#sorting
+
+SELECT * from employee ORDER BY age ASC ->by default it is ascending;
+SELECT * from employee ORDER BY age DESC
+
+#aliases
+
+SELECT e.ID, e.age, d.department_name
+FROM employee AS e, department AS d
+WHERE e.name="priya" AND e.ID=d.ID;
+
+#aggregate functions
+
+SELECT MIN(age) AS minage FROM employee;
+count();
+avg();
+max();
+sum();
+
+#group by
+
+SELECT COUNT(age),age FROM employee GROUP BY age;
+
+#top,limit and rownum
+
+~SELECT TOP 2 * FROM employee;
+~SELECT * FROM employee WHERE ROWNUM < 3; 
+~SELECT TOP 50 PERCENT * FROM employee;
+SELECT * FROM employee LIMIT 2;
+
+#having(used with agrregate function in place of where)
+
+SELECT COUNT(ID), name
+FROM employee
+GROUP BY name
+HAVING COUNT(ID) > 2
+ORDER BY COUNT(ID) DESC;
+
+#Exits
+
+SELECT name
+FROM employee
+WHERE EXISTS (SELECT department_id FROM department WHERE id = employee.id);
+
+#Any and all
+
+SELECT name
+FROM employee
+WHERE department_id = ANY (SELECT department_id FROM department WHERE id = 100);  ->if any of the query matches;
+
+ALL() ->if all the query matches;
+
+#select into(take backup into another table)
+
+SELECT * INTO employeesBackup2017 FROM employee; ->copy into the table employeesBackup2017
+SELECT * INTO employeesBackup2017 IN 'Backup.mdb' FROM employee; ->copy into another database;
+
+#insert into
+
+INSERT INTO Customers (CustomerName, City, Country) SELECT SupplierName, City, Country FROM Suppliers;
+
+#alter
+
+ALTER TABLE table_name ADD column_name datatype;
+ALTER TABLE table_name DROP COLUMN column_name;
+ALTER TABLE table_name MODIFY COLUMN column_name datatype;
+
