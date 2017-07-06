@@ -8,13 +8,13 @@ desc tablename;
 
 #create table
 
-CREATE TABLE tutorials_tbl(
-   -> tutorial_id INT NOT NULL AUTO_INCREMENT,
-   -> tutorial_title VARCHAR(100) NOT NULL,
-   -> tutorial_author VARCHAR(40) NOT NULL,
-   -> submission_date DATE,
-   -> PRIMARY KEY ( tutorial_id )
-   -> );
+CREATE TABLE tutorials(
+    id INT NOT NULL ,
+    name VARCHAR(100) NOT NULL,
+    age VARCHAR(40) NOT NULL,
+    retirement varchar(20),
+    department_id int
+    );
 #primary and foreign key
 
 alter table employee ADD FOREIGN KEY (department_id) REFERENCES department(department_id);
@@ -169,7 +169,15 @@ where id=(select
 id from department
 where department_name='it')
 
-select e.id,e.name,e.age,e.retirement,d.department_name
-from employee as e,department as d
-where e.department_id=d.department_id;
+#copy of a table
+
+create table table2 as (select * from employee where 1=2);  ->without data;
+create table table2 as (select * from employee);   ->with data;
+
+#backup a database
+
+mysqldump -u [username] -p[password] databasename > databasename.sql  ->single database
+mysqldump -u root -ptecmint --databases rsyslog syslog > rsyslog_syslog.sql ->multiple database
+mysqldump -u root -ptecmint --all-databases > all-databases.sql  ->all databases
+
 
