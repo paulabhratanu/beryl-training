@@ -123,4 +123,53 @@ INSERT INTO Customers (CustomerName, City, Country) SELECT SupplierName, City, C
 ALTER TABLE table_name ADD column_name datatype;
 ALTER TABLE table_name DROP COLUMN column_name;
 ALTER TABLE table_name MODIFY COLUMN column_name datatype;
+ALTER TABLE employee DROP PRIMARY KEY;
+
+#joins
+
+SELECT e.id,e.name
+FROM employee as e
+INNER JOIN department as d ON e.id=d.id;
+
+SELECT e.id,e.name
+FROM employee as e
+LEFT JOIN department as d ON e.department_id=d.department_id
+order by e.id;
+
+SELECT e.id,e.name
+FROM employee as e
+RIGHT JOIN department as d ON e.department_id=d.department_id
+order by e.id;
+
+full join not supported in mysql instead use unions;
+
+select e1.age,e1.name
+from employee e1,employee e2
+where e1.id=e2.id
+
+#union
+
+
+    *Each SELECT statement within UNION must have the same number of columns
+    *The columns must also have similar data types
+    *The columns in each SELECT statement must also be in the same order
+
+select id from employee
+union
+select department_id from department
+
+union ->distinct values;
+union all ->duplicate values;
+
+#subquery
+
+select name
+from employee
+where id=(select
+id from department
+where department_name='it')
+
+select e.id,e.name,e.age,e.retirement,d.department_name
+from employee as e,department as d
+where e.department_id=d.department_id;
 
