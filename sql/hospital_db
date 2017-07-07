@@ -1,0 +1,345 @@
+Database changed
+mysql> show tables;
++--------------------+
+| Tables_in_hospital |
++--------------------+
+| doctor             |
+| lab                |
+| patient            |
++--------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from doctor;
++----------+-------------+---------------+
+| doctorid | doctor_name | dept          |
++----------+-------------+---------------+
+| 200      | Dr Raj      | opthamologist |
+| 201      | Dr amit     | paediatictian |
+| 202      | Dr rahul    | gyncologist   |
+| 203      | Dr rani     | opthamologist |
+| 204      | Dr jeykl    | medicine      |
++----------+-------------+---------------+
+5 rows in set (1.42 sec)
+
+mysql> select * from lab;
++-------+-----+--------+----------+------------+----------+--------+
+| labno | pid | weight | doctorid | date       | category | amount |
++-------+-----+--------+----------+------------+----------+--------+
+| 1     | 100 |     30 | 200      | 2017-06-02 | A        |   1000 |
+| 2     | 100 |     30 | 201      | 2017-07-07 | A        |   2000 |
+| 3     | 101 |     60 | 201      | 2017-08-08 | B        |   3000 |
+| 4     | 102 |     80 | 202      | 2017-09-09 | C        |   4000 |
+| 5     | 103 |     90 | 204      | 2017-09-02 | D        |   5000 |
++-------+-----+--------+----------+------------+----------+--------+
+5 rows in set (0.52 sec)
+
+mysql> select * from patient;
++-----+-------+-----+--------+--------+----------+------------+----------+----------+
+| pid | name  | age | weight | gender | address  | phone_no   | disease  | doctorid |
++-----+-------+-----+--------+--------+----------+------------+----------+----------+
+| 100 | amit  |  20 |     30 | male   | 13B road | 9911431764 | typhoid  | 200      |
+| 101 | rahul |  21 |     60 | male   | 15B road | 9911431765 | jaundice | 201      |
+| 102 | abhay |  30 |     80 | female | 16B road | 9911431766 | cholera  | 202      |
+| 103 | priya |  15 |     90 | female | 17B road | 9911431767 | viral    | 203      |
+| 104 | suraj |  42 |    100 | male   | 18B road | 9911431768 | asthma   | 204      |
++-----+-------+-----+--------+--------+----------+------------+----------+----------+
+5 rows in set (0.26 sec)
+
+mysql> desc doctor;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| doctorid    | varchar(10) | NO   | PRI |         |       |
+| doctor_name | varchar(10) | NO   |     | NULL    |       |
+| dept        | varchar(20) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc patient;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| pid      | varchar(10) | NO   | PRI |         |       |
+| name     | varchar(10) | NO   |     | NULL    |       |
+| age      | int(11)     | NO   |     | NULL    |       |
+| weight   | int(11)     | NO   |     | NULL    |       |
+| gender   | varchar(10) | NO   |     | NULL    |       |
+| address  | varchar(10) | NO   |     | NULL    |       |
+| phone_no | varchar(20) | YES  |     | NULL    |       |
+| disease  | varchar(10) | NO   |     | NULL    |       |
+| doctorid | varchar(10) | NO   | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> desc lab;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| labno    | varchar(10) | NO   | PRI |         |       |
+| pid      | varchar(10) | NO   | MUL | NULL    |       |
+| weight   | int(11)     | NO   |     | NULL    |       |
+| doctorid | varchar(10) | YES  | MUL | NULL    |       |
+| date     | date        | NO   |     | NULL    |       |
+| category | varchar(10) | NO   |     | NULL    |       |
+| amount   | int(11)     | NO   |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> select * from patient;
++-----+-------+-----+--------+--------+----------+------------+----------+----------+
+| pid | name  | age | weight | gender | address  | phone_no   | disease  | doctorid |
++-----+-------+-----+--------+--------+----------+------------+----------+----------+
+| 100 | amit  |  20 |     30 | male   | 13B road | 9911431764 | typhoid  | 200      |
+| 101 | rahul |  21 |     60 | male   | 15B road | 9911431765 | jaundice | 201      |
+| 102 | abhay |  30 |     80 | female | 16B road | 9911431766 | cholera  | 202      |
+| 103 | priya |  15 |     90 | female | 17B road | 9911431767 | viral    | 203      |
+| 104 | suraj |  42 |    100 | male   | 18B road | 9911431768 | asthma   | 204      |
++-----+-------+-----+--------+--------+----------+------------+----------+----------+
+5 rows in set (0.03 sec)
+
+mysql> select * from doctor;
++----------+-------------+---------------+
+| doctorid | doctor_name | dept          |
++----------+-------------+---------------+
+| 200      | Dr Raj      | opthamologist |
+| 201      | Dr amit     | paediatictian |
+| 202      | Dr rahul    | gyncologist   |
+| 203      | Dr rani     | opthamologist |
+| 204      | Dr jeykl    | medicine      |
++----------+-------------+---------------+
+5 rows in set (0.01 sec)
+
+mysql> select * from lab;
++-------+-----+--------+----------+------------+----------+--------+
+| labno | pid | weight | doctorid | date       | category | amount |
++-------+-----+--------+----------+------------+----------+--------+
+| 1     | 100 |     30 | 200      | 2017-06-02 | A        |   1000 |
+| 2     | 100 |     30 | 201      | 2017-07-07 | A        |   2000 |
+| 3     | 101 |     60 | 201      | 2017-08-08 | B        |   3000 |
+| 4     | 102 |     80 | 202      | 2017-09-09 | C        |   4000 |
+| 5     | 103 |     90 | 204      | 2017-09-02 | D        |   5000 |
++-------+-----+--------+----------+------------+----------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select pid,name from patient where disease='typhoid';
++-----+------+
+| pid | name |
++-----+------+
+| 100 | amit |
++-----+------+
+1 row in set (0.00 sec)
+
+
+
+mysql> select doctorid from patient where pid=100;
++----------+
+| doctorid |
++----------+
+| 200      |
++----------+
+1 row in set (0.02 sec)
+
+mysql> select date,amount,labno from lab where pid=100;
++------------+--------+-------+
+| date       | amount | labno |
++------------+--------+-------+
+| 2017-06-02 |   1000 | 1     |
+| 2017-07-07 |   2000 | 2     |
++------------+--------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select sum(amount) from lab where pid=101;
++-------------+
+| sum(amount) |
++-------------+
+|        3000 |
++-------------+
+1 row in set (0.02 sec)
+
+mysql> select name
+    -> from patient
+    -> where doctorid=(select doctorid
+    -> from doctor where dept='medicine');
++-------+
+| name  |
++-------+
+| suraj |
++-------+
+1 row in set (0.02 sec)
+
+mysql> select count(pid),count(doctorid)
+    -> from lab
+    -> where doctorid=(select doctorid
+    -> from doctor where dept='medicine');
++------------+-----------------+
+| count(pid) | count(doctorid) |
++------------+-----------------+
+|          1 |               1 |
++------------+-----------------+
+1 row in set (0.02 sec)
+
+mysql> select pid,amount
+    -> from lab
+    -> order by amount;
++-----+--------+
+| pid | amount |
++-----+--------+
+| 100 |   1000 |
+| 100 |   2000 |
+| 101 |   3000 |
+| 102 |   4000 |
+| 103 |   5000 |
++-----+--------+
+5 rows in set (0.00 sec)
+
+mysql> select p.pid,p.name,l.date
+    -> from patient as p
+    -> inner join lab as l
+    -> on p.pid=l.pid;
++-----+-------+------------+
+| pid | name  | date       |
++-----+-------+------------+
+| 100 | amit  | 2017-06-02 |
+| 100 | amit  | 2017-07-07 |
+| 101 | rahul | 2017-08-08 |
+| 102 | abhay | 2017-09-09 |
+| 103 | priya | 2017-09-02 |
++-----+-------+------------+
+5 rows in set (0.02 sec)
+
+mysql> select pid,name
+    -> from patient 
+    -> where doctorid=200
+    -> union
+    -> select doctorid,labno
+    -> from lab
+    -> where pid=100;
++------+------+
+| pid  | name |
++------+------+
+| 100  | amit |
+| 200  | 1    |
+| 201  | 2    |
++------+------+
+3 rows in set (0.00 sec)
+
+mysql> select p.pid,l.doctorid
+    -> from patient as p
+    -> left join lab as l
+    -> on l.pid=300;
++-----+----------+
+| pid | doctorid |
++-----+----------+
+| 100 | NULL     |
+| 101 | NULL     |
+| 102 | NULL     |
+| 103 | NULL     |
+| 104 | NULL     |
++-----+----------+
+5 rows in set (0.00 sec)
+
+mysql> select p.pid,l.doctorid
+    -> from patient as p
+    -> right join lab as l
+    -> on l.pid=300;
++------+----------+
+| pid  | doctorid |
++------+----------+
+| NULL | 200      |
+| NULL | 201      |
+| NULL | 201      |
+| NULL | 202      |
+| NULL | 204      |
++------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select p.pid,p.name
+    -> from patient as p,lab as l
+    -> where p.pid=l.pid;
++-----+-------+
+| pid | name  |
++-----+-------+
+| 100 | amit  |
+| 100 | amit  |
+| 101 | rahul |
+| 102 | abhay |
+| 103 | priya |
++-----+-------+
+5 rows in set (0.45 sec)
+
+mysql> select p.pid,p.name,l.labno
+    -> from patient as p,lab as l
+    -> where p.pid=l.pid;
++-----+-------+-------+
+| pid | name  | labno |
++-----+-------+-------+
+| 100 | amit  | 1     |
+| 100 | amit  | 2     |
+| 101 | rahul | 3     |
+| 102 | abhay | 4     |
+| 103 | priya | 5     |
++-----+-------+-------+
+
+mysql> select name
+    -> from patient
+    -> where pid in (select
+    -> pid from lab);
++-------+
+| name  |
++-------+
+| amit  |
+| rahul |
+| abhay |
+| priya |
++-------+
+4 rows in set (0.00 sec)
+
+mysql> select p.name,p.age,p.gender,p.address,l.labno
+    -> from patient as p
+    -> inner join lab as l
+    -> on p.pid=l.pid
+    -> inner join doctor as d
+    -> on d.doctorid=l.doctorid where
+    -> d.doctor_name='Dr amit';
++-------+-----+--------+----------+-------+
+| name  | age | gender | address  | labno |
++-------+-----+--------+----------+-------+
+| amit  |  20 | male   | 13B road | 2     |
+| rahul |  21 | male   | 15B road | 3     |
++-------+-----+--------+----------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select p.name,p.age,p.gender,p.address,l.labno
+    -> from patient as p
+    -> inner join lab as l
+    -> on p.pid=l.pid
+    -> inner join doctor as d
+    -> on d.doctorid=l.doctorid where
+    -> d.doctor_name='Dr Raj';
++------+-----+--------+----------+-------+
+| name | age | gender | address  | labno |
++------+-----+--------+----------+-------+
+| amit |  20 | male   | 13B road | 1     |
++------+-----+--------+----------+-------+
+1 row in set (0.00 sec)
+
+mysql> select *
+    -> from patient as p
+    -> inner join lab as l
+    -> on p.pid=l.pid
+    -> inner join doctor as d
+    -> on d.doctorid=l.doctorid;
++-----+-------+-----+--------+--------+----------+------------+----------+----------+-------+-----+--------+----------+------------+----------+--------+----------+-------------+---------------+
+| pid | name  | age | weight | gender | address  | phone_no   | disease  | doctorid | labno | pid | weight | doctorid | date       | category | amount | doctorid | doctor_name | dept          |
++-----+-------+-----+--------+--------+----------+------------+----------+----------+-------+-----+--------+----------+------------+----------+--------+----------+-------------+---------------+
+| 100 | amit  |  20 |     30 | male   | 13B road | 9911431764 | typhoid  | 200      | 1     | 100 |     30 | 200      | 2017-06-02 | A        |   1000 | 200      | Dr Raj      | opthamologist |
+| 100 | amit  |  20 |     30 | male   | 13B road | 9911431764 | typhoid  | 200      | 2     | 100 |     30 | 201      | 2017-07-07 | A        |   2000 | 201      | Dr amit     | paediatictian |
+| 101 | rahul |  21 |     60 | male   | 15B road | 9911431765 | jaundice | 201      | 3     | 101 |     60 | 201      | 2017-08-08 | B        |   3000 | 201      | Dr amit     | paediatictian |
+| 102 | abhay |  30 |     80 | female | 16B road | 9911431766 | cholera  | 202      | 4     | 102 |     80 | 202      | 2017-09-09 | C        |   4000 | 202      | Dr rahul    | gyncologist   |
+| 103 | priya |  15 |     90 | female | 17B road | 9911431767 | viral    | 203      | 5     | 103 |     90 | 204      | 2017-09-02 | D        |   5000 | 204      | Dr jeykl    | medicine      |
++-----+-------+-----+--------+--------+----------+------------+----------+----------+-------+-----+--------+----------+------------+----------+--------+----------+-------------+---------------+
+5 rows in set (0.00 sec)
+
+
+
+

@@ -1,0 +1,116 @@
+create table patient(
+pid varchar(10),
+name varchar(10) not null,
+age int not null,
+weight int not null,
+gender varchar(10) not null,
+address varchar(10) not null,
+phone_no int not null,
+disease varchar(10) not null,
+doctorid varchar(10) not null
+);
+
+create table doctor(
+doctorid varchar(10),
+doctor_name varchar(10) not null,
+dept varchar(10) not null
+);
+
+create table lab(
+labno varchar(10),
+pid varchar(10) not null,
+weight int not null,
+doctorid varchar(10),
+date date not null,
+category varchar(10) not null,
+amount int not null
+);
+
+insert into patient values(100,'amit',20,30,'male','13B road',9911431764,'typhoid',200);
+insert into patient values(101,'rahul',21,60,'male','15B road',9911431765,'jaundice',201);
+insert into patient values(102,'abhay',30,80,'female','16B road',9911431766,'cholera',202);
+insert into patient values(103,'priya',15,90,'female','17B road',9911431767,'viral',203);
+insert into patient values(104,'suraj',42,100,'male','18B road',9911431768,'asthma',204);
+
+insert into doctor values(200,'Dr Raj','opthamologist');
+insert into doctor values(201,'Dr amit','paediatician');
+insert into doctor values(202,'Dr rahul','gyncologist');
+insert into doctor values(203,'Dr rani','opthamologist');
+insert into doctor values(204,'Dr jeykl','medicine');
+
+insert into lab values(1,100,30,200,'2017-6-2','A',1000);
+insert into lab values(2,100,30,201,'2017-7-7','A',2000);
+insert into lab values(3,101,60,201,'2017-8-8','B',3000);
+insert into lab values(4,102,80,202,'2017-9-9','C',4000);
+insert into lab values(5,103,90,204,'2017-9-2','D',5000);
+
+alter table patient ADD FOREIGN KEY (doctorid) REFERENCES doctor(doctorid);
+
+ALTER TABLE patient ADD PRIMARY KEY (pid);
+
+
+#queries
+
+select pid,name from patient where disease='typhoid';
+
+select doctorid from patient where pid=100;
+
+select date,amount,labno from lab where pid=100;
+
+select sum(amount) from lab where pid=101;
+
+select count(pid) from doctor where doctorid=200;
+
+select name
+from patient
+where doctorid=(select doctorid
+from doctor where dept='medicine');
+
+select count(pid),count(doctorid)
+from lab
+where doctorid=(select doctorid
+from doctor where dept='medicine');
+
+select pid,amount
+from lab
+order by amount;
+
+select p.pid,p.name,l.date
+from patient as p
+inner join lab as l
+on p.pid=l.pid;
+
+select pid,name
+from patient 
+where doctorid=200
+union
+select doctorid,labno
+from lab
+where pid=100
+
+select p.pid,l.doctorid
+from patient as p
+left join lab as l
+on l.pid=300;
+
+select p.pid,l.doctorid
+from patient as p
+right join lab as l
+on l.pid=300;
+
+select p.pid,p.name,l.labno
+from patient as p,lab as l
+where p.pid=l.pid;
+
+select name
+from patient
+where pid in (select
+pid from lab);
+
+select p.name,p.age,p.gender,p.address,l.labno
+from patient as p
+inner join lab as l
+on p.pid=l.pid
+inner join doctor as d
+on d.doctorid=l.doctorid where
+d.doctor_name='Dr Raj';
