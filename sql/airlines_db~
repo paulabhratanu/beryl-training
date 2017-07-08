@@ -1,0 +1,270 @@
+mysql> desc flight;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| fno      | int(11)     | NO   | PRI | 0       |       |
+| froms    | varchar(20) | YES  |     | NULL    |       |
+| tos      | varchar(20) | YES  |     | NULL    |       |
+| distance | int(11)     | YES  |     | NULL    |       |
+| departs  | time        | YES  |     | NULL    |       |
+| arrives  | time        | YES  |     | NULL    |       |
+| price    | int(11)     | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> desc aircraft;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| aid           | int(11)     | NO   | PRI | 0       |       |
+| aname         | varchar(20) | YES  |     | NULL    |       |
+| cruisingrange | int(11)     | YES  |     | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc certified;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| eid   | int(11) | YES  | MUL | NULL    |       |
+| aid   | int(11) | YES  | MUL | NULL    |       |
++-------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc employees;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| eid    | int(11)     | NO   | PRI | 0       |       |
+| ename  | varchar(20) | YES  |     | NULL    |       |
+| salary | int(11)     | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from flight;
++-----+---------+----------+----------+----------+----------+--------+
+| fno | froms   | tos      | distance | departs  | arrives  | price  |
++-----+---------+----------+----------+----------+----------+--------+
+| 100 | Delhi   | kolkata  |     1000 | 23:10:05 | 05:12:03 |   2000 |
+| 101 | Delhi   | kolkata  |     1000 | 23:10:06 | 06:11:03 | 100000 |
+| 102 | mumbai  | kolkata  |     2000 | 14:10:05 | 07:12:05 |  20000 |
+| 103 | chennai | kolkata  |     3000 | 18:00:00 | 08:12:03 |  40000 |
+| 104 | LA      | honolulu |     4000 | 19:10:05 | 09:12:03 |  50000 |
+| 105 | LA      | chicago  |     5000 | 20:10:05 | 10:12:03 |  70000 |
++-----+---------+----------+----------+----------+----------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from aircraft;
++------+---------------------+---------------+
+| aid  | aname               | cruisingrange |
++------+---------------------+---------------+
+| 1000 | indian airlines     |          2000 |
+| 1001 | jet airlines        |          3000 |
+| 1002 | kingfisher airlines |          4000 |
+| 1003 | jet airlines        |          5000 |
+| 1004 | spice airlines      |          5000 |
+| 1005 | spice airlines      |          7000 |
++------+---------------------+---------------+
+6 rows in set (0.00 sec)
+
+
+mysql> select * from certified;
++------+------+
+| eid  | aid  |
++------+------+
+|  200 | 1000 |
+|  203 | 1000 |
+|  205 | 1002 |
+|  206 | 1003 |
++------+------+
+4 rows in set (0.00 sec)
+
+mysql> select * from employees;
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+| 200 | amit   |  20000 |
+| 201 | raj    |  30000 |
+| 202 | priya  |  40000 |
+| 203 | kunal  |  50000 |
+| 204 | ravi   |  60000 |
+| 205 | vinod  |  70000 |
+| 206 | batman |  90000 |
++-----+--------+--------+
+7 rows in set (0.00 sec)
+
+#queries
+
+a) mysql> select a.aname
+    -> from aircraft as a
+    -> inner join certified as c
+    -> on a.aid=c.aid
+    -> inner join employees as e
+    -> on e.eid=c.eid where
+    -> e.salary>40000;
++---------------------+
+| aname               |
++---------------------+
+| indian airlines     |
+| kingfisher airlines |
+| jet airlines        |
++---------------------+
+3 rows in set (0.00 sec)
+
+b) mysql> select c.eid,max(a.cruisingrange)
+    -> from certified as c,aircraft as a
+    -> where c.aid=a.aid
+    -> group by c.eid
+    -> having count(c.eid)>3;
+Empty set (0.00 sec)
+
+c) mysql> select e.ename
+    -> from employees as e
+    -> inner join certified as c
+    -> on e.eid=c.eid
+    -> where e.salary<(select min(price)
+    -> from flight
+    -> where froms='delhi' and tos='kolkata');
++-------+
+| ename |
++-------+
+| kunal |
++-------+
+1 row in set (0.00 sec)
+
+d) mysql> select a.aname,avg(e.salary)
+    -> from aircraft as a,employees as e,certified as c
+    -> where e.eid=c.eid and a.aid=c.aid and a.cruisingrange>1000
+    -> group by a.aname,a.aid;
++---------------------+---------------+
+| aname               | avg(e.salary) |
++---------------------+---------------+
+| indian airlines     |    10500.0000 |
+| jet airlines        |    90000.0000 |
+| kingfisher airlines |    70000.0000 |
++---------------------+---------------+
+3 rows in set (0.00 sec)
+
+
+e) mysql> select e.ename
+    -> from employees as e
+    -> inner join certified as c
+    -> on e.eid=c.eid
+    -> inner join aircraft as a
+    -> on a.aid=c.aid where
+    -> a.aname like '%jet%';
++--------+
+| ename  |
++--------+
+| batman |
++--------+
+1 row in set (0.00 sec)
+
+
+f) mysql> select aid
+    -> from aircraft
+    -> where cruisingrange>
+    -> (select distance
+    -> from flight 
+    -> where froms='LA' and tos='chicago');
++------+
+| aid  |
++------+
+| 1005 |
++------+
+1 row in set (0.00 sec)
+
+g) mysql> select froms,tos from flight where distance >=(select min(cruisingrange) from employees as e join certified as c on e.eid=c.eid join aircraft as a on a.aid=c.aid where e.salary>40000);
++-------+----------+
+| froms | tos      |
++-------+----------+
+| LA    | honolulu |
+| LA    | chicago  |
++-------+----------+
+2 rows in set (0.00 sec)
+
+
+h) mysql> select e.ename
+    -> from employees as e
+    -> inner join certified as c
+    -> on e.eid=c.eid
+    -> inner join aircraft as a
+    -> on c.aid=a.aid
+    -> where a.cruisingrange>3000 and a.aname!='jet airlines';
++-------+
+| ename |
++-------+
+| vinod |
++-------+
+1 row in set (0.00 sec)
+
+j) mysql> select avg(e1.salary)-avg(e2.salary)
+    -> from employees as e1,employees as e2
+    -> inner join certified as c
+    -> where e1.eid=c.eid;
++-------------------------------+
+| avg(e1.salary)-avg(e2.salary) |
++-------------------------------+
+|                      821.4286 |
++-------------------------------+
+
+k) mysql> select distinct e.ename,e.salary
+    -> from employees as e
+    -> where e.eid not in(select c.eid
+    -> from certified c)
+    -> and e.salary>(select avg(e.salary)
+    -> from employees as e,certified as c
+    -> where e.eid=c.eid);
++-------+--------+
+| ename | salary |
++-------+--------+
+| ravi  |  60000 |
++-------+--------+
+1 row in set (0.01 sec)
+
+l) mysql> select e.ename
+    -> from employees as e
+    -> inner join certified as c
+    -> on e.eid=c.eid
+    -> inner join aircraft as a
+    -> on c.aid=a.aid where
+    -> a.cruisingrange>1000;
++--------+
+| ename  |
++--------+
+| amit   |
+| kunal  |
+| vinod  |
+| batman |
++--------+
+4 rows in set (0.00 sec)
+
+m) mysql> select e.ename
+    -> from employees as e
+    -> inner join certified as c
+    -> on e.eid=c.eid
+    -> inner join aircraft as a
+    -> on c.aid=a.aid where
+    -> a.cruisingrange>1000
+    -> group by a.aname
+    -> having count(a.aname)>1;
++-------+
+| ename |
++-------+
+| amit  |
++-------+
+
+n) mysql> select e.ename
+    -> from employees as e
+    -> inner join certified as c
+    -> on e.eid=c.eid
+    -> inner join aircraft as a
+    -> on c.aid=a.aid where
+    -> a.cruisingrange>1000 and a.aname='jet airlines';
++--------+
+| ename  |
++--------+
+| batman |
++--------+
+1 row in set (0.00 sec)
+

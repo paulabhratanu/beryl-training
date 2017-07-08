@@ -1,116 +1,158 @@
-create table patient(
-pid varchar(10),
-name varchar(10) not null,
-age int not null,
-weight int not null,
-gender varchar(10) not null,
-address varchar(10) not null,
-phone_no int not null,
-disease varchar(10) not null,
-doctorid varchar(10) not null
+create table flight(
+fno int,
+froms varchar(20),
+tos varchar(20),
+distance int,
+departs time,
+arrives time,
+price int
 );
 
-create table doctor(
-doctorid varchar(10),
-doctor_name varchar(10) not null,
-dept varchar(10) not null
+create table aircraft(
+aid int,
+aname varchar(20),
+cruisingrange int
 );
 
-create table lab(
-labno varchar(10),
-pid varchar(10) not null,
-weight int not null,
-doctorid varchar(10),
-date date not null,
-category varchar(10) not null,
-amount int not null
+create table certified(
+eid int,
+aid int
 );
 
-insert into patient values(100,'amit',20,30,'male','13B road',9911431764,'typhoid',200);
-insert into patient values(101,'rahul',21,60,'male','15B road',9911431765,'jaundice',201);
-insert into patient values(102,'abhay',30,80,'female','16B road',9911431766,'cholera',202);
-insert into patient values(103,'priya',15,90,'female','17B road',9911431767,'viral',203);
-insert into patient values(104,'suraj',42,100,'male','18B road',9911431768,'asthma',204);
+create table employees(
+eid int,
+ename varchar(20),
+salary int
+);
 
-insert into doctor values(200,'Dr Raj','opthamologist');
-insert into doctor values(201,'Dr amit','paediatician');
-insert into doctor values(202,'Dr rahul','gyncologist');
-insert into doctor values(203,'Dr rani','opthamologist');
-insert into doctor values(204,'Dr jeykl','medicine');
+insert into flight values(100,'Delhi','kolkata',1000,'23:10:05','5:12:03',2000);
+insert into flight values(101,'Delhi','kolkata',1000,'23:10:06','6:11:03',100000);
+insert into flight values(102,'mumbai','kolkata',2000,'14:10:05','7:12:05',20000);
+insert into flight values(103,'chennai','kolkata',3000,'18:00:00','8:12:03',40000);
+insert into flight values(104,'LA','honolulu',4000,'19:10:05','9:12:03',50000);
+insert into flight values(105,'LA','chicago',5000,'20:10:05','10:12:03',70000);
 
-insert into lab values(1,100,30,200,'2017-6-2','A',1000);
-insert into lab values(2,100,30,201,'2017-7-7','A',2000);
-insert into lab values(3,101,60,201,'2017-8-8','B',3000);
-insert into lab values(4,102,80,202,'2017-9-9','C',4000);
-insert into lab values(5,103,90,204,'2017-9-2','D',5000);
+insert into aircraft values(1000,'indian airlines',2000);
+insert into aircraft values(1001,'jet airlines',3000);
+insert into aircraft values(1002,'kingfisher airlines',4000);
+insert into aircraft values(1003,'jet airlines',5000);
+insert into aircraft values(1004,'spice airlines',5000);
+insert into aircraft values(1005,'spice airlines',7000);
 
-alter table patient ADD FOREIGN KEY (doctorid) REFERENCES doctor(doctorid);
+insert into certified values(200,1000);
+insert into certified values(203,1000);
+insert into certified values(205,1002);
+insert into certified values(206,1003);
 
-ALTER TABLE patient ADD PRIMARY KEY (pid);
+insert into employees values(200,'amit',20000);
+insert into employees values(201,'raj',30000);
+insert into employees values(202,'priya',40000);
+insert into employees values(203,'kunal',50000);
+insert into employees values(204,'ravi',60000);
+insert into employees values(205,'vinod',70000);
+insert into employees values(206,'batman',90000);
+
+ALTER TABLE flight ADD PRIMARY KEY (fno);
+ALTER TABLE aircraft ADD PRIMARY KEY (aid);
+ALTER TABLE employees ADD PRIMARY KEY (eid);
+
+alter table certified ADD FOREIGN KEY (eid) REFERENCES employees(eid);
+alter table certified ADD FOREIGN KEY (aid) REFERENCES aircraft(aid);
 
 
-#queries
+a)select a.aname
+from aircraft as a
+inner join certified as c
+on a.aid=c.aid
+inner join employees as e
+on e.eid=c.eid where
+e.salary>40000;
 
-select pid,name from patient where disease='typhoid';
+b)select c.eid,max(a.cruisingrange)
+from certified as c,aircraft as a
+where c.aid=a.aid
+group by c.eid
+having count(c.eid)>3;
 
-select doctorid from patient where pid=100;
 
-select date,amount,labno from lab where pid=100;
+c)select e.ename
+from employees as e
+inner join certified as c
+on e.eid=c.eid
+where e.salary<(select min(price)
+from flight
+where froms='delhi' and tos='kolkata');
 
-select sum(amount) from lab where pid=101;
+d)select a.aname,avg(e.salary)
+from aircraft as a,employees as e,certified as c
+where e.eid=c.eid and a.aid=c.aid and a.cruisingrange>1000
+group by a.aname,a.aid;
 
-select count(pid) from doctor where doctorid=200;
 
-select name
-from patient
-where doctorid=(select doctorid
-from doctor where dept='medicine');
+e)select e.ename
+from employees as e
+inner join certified as c
+on e.eid=c.eid
+inner join aircraft as a
+on a.aid=c.aid where
+a.aname like '%jet%';
 
-select count(pid),count(doctorid)
-from lab
-where doctorid=(select doctorid
-from doctor where dept='medicine');
+f)select aid
+from aircraft 
+where cruisingrange >
+(select distance
+from flight 
+where froms='LA' and tos='chicago');
 
-select pid,amount
-from lab
-order by amount;
+g)select froms,tos from flight where distance >=(select min(cruisingrange) from employees as e join certified as c on e.eid=c.eid join aircraft as a on a.aid=c.aid where e.salary>40000);ified as c
+on e.eid=c.eid
+where salary>40000);
 
-select p.pid,p.name,l.date
-from patient as p
-inner join lab as l
-on p.pid=l.pid;
+h)select e.ename
+from employees as e
+inner join certified as c
+on e.eid=c.eid
+inner join aircraft as a
+on c.aid=a.aid
+where a.cruisingrange>3000 and a.aname!='jet airlines';
 
-select pid,name
-from patient 
-where doctorid=200
-union
-select doctorid,labno
-from lab
-where pid=100
+j)select avg(e1.salary)-avg(e2.salary)
+from employees as e1,employees as e2
+inner join certified as c
+where e1.eid=c.eid;
 
-select p.pid,l.doctorid
-from patient as p
-left join lab as l
-on l.pid=300;
+k)select distinct e.ename,e.salary
+from employees as e
+where e.eid not in(select c.eid
+from certified c)
+and e.salary>(select avg(e.salary)
+from employees as e,certified as c
+where e.eid=c.eid);
 
-select p.pid,l.doctorid
-from patient as p
-right join lab as l
-on l.pid=300;
+l)select e.ename
+from employees as e
+inner join certified as c
+on e.eid=c.eid
+inner join aircraft as a
+on c.aid=a.aid where
+a.cruisingrange>1000;
 
-select p.pid,p.name,l.labno
-from patient as p,lab as l
-where p.pid=l.pid;
+m)select e.ename
+from employees as e
+inner join certified as c
+on e.eid=c.eid
+inner join aircraft as a
+on c.aid=a.aid where
+a.cruisingrange>1000
+group by a.aname
+having count(a.aname)>1;
 
-select name
-from patient
-where pid in (select
-pid from lab);
+n)select e.ename
+from employees as e
+inner join certified as c
+on e.eid=c.eid
+inner join aircraft as a
+on c.aid=a.aid where
+a.cruisingrange>1000 and a.aname='jet airlines';
 
-select p.name,p.age,p.gender,p.address,l.labno
-from patient as p
-inner join lab as l
-on p.pid=l.pid
-inner join doctor as d
-on d.doctorid=l.doctorid where
-d.doctor_name='Dr Raj';
+ 
