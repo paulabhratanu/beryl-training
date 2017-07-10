@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jaypee institute of information technology</title>
+<link rel="stylesheet" href="jiit.css">
+</head>
+<body>
+<h1>Jaypee institute of information technology</h1>
+<div class="dropdown">
+<ul >
+<li><a href="https://www.google.co.in/" target="_blank">Home</a></li>
+<li><a href="https://www.google.co.in/" target="_blank">Department</a></li>
+<li><a href="https://www.google.co.in/" target="_blank">placement</a></li>
+<li><a href="https://www.google.co.in/" target="_blank">contact us</a></li>
+</ul>
+</div>
+<br>
+<marquee>----Best college in Delhi-Ncr----</marquee>
+
+
+
+<div class="w3-content w3-display-container">
+  <img class="mySlides" src="https://cdn.collegebol.com/media/college_header_image/jaypee-institute-of-information-technology-noida-jiit-noida.jpg" style="width:100%;height:400px">
+  <img class="mySlides" src="http://3.bp.blogspot.com/_qxkbUzuI-mI/RbuC30setbI/AAAAAAAAALM/wQKQ2LyHSZA/s320/Picture+002.jpg" style="width:100%;height:400px">
+  <img class="mySlides" src="http://schoolbook.getmyuni.com/assets/images/rev_img/5121__1945/1428732293slide3.jpg" style="width:100%;height:400px">
+  <img class="mySlides" src="http://static-collegedunia.com/public/college_data/images/campusimage/14405736622.JPG" style="width:100%;height:400px">
+
+  <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+  <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+</div>
+<script>
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  x[slideIndex-1].style.display = "block";  
+}
+</script>
+<video  autoplay>
+  <source src="movie.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<div class="form">
+<form>
+Name:<br>
+<input type="text" name="firstname"><br>
+Phone no:<br>
+<input type="text" name="firstname"><br>
+Query:
+<textarea name="comment" form="usrform">
+Enter text here...</textarea>
+<input type="submit" value="Submit"><br>
+</form>
+</form>
+</div>
+
+<div class="college">
+<p>Copyright@jiit.ac.in</p>
+</div>
+
+</body>
+</html>

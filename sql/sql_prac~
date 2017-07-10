@@ -104,7 +104,7 @@ where cruisingrange >
 from flight 
 where froms='LA' and tos='chicago');
 
-g)select froms,tos from flight where distance >=(select min(cruisingrange) from employees as e join certified as c on e.eid=c.eid join aircraft as a on a.aid=c.aid where e.salary>40000);ified as c
+g)select froms,tos from flight where distance >=(select min(cruisingrange) from employees as e join certified as c on e.eid=c.eid join aircraft as a on a.aid=c.aid where e.salary>40000)
 on e.eid=c.eid
 where salary>40000);
 

@@ -1,0 +1,37 @@
+Metadata typically define the document title, character set, styles, links, scripts, and other meta information.
+
+#conditional comments
+<!--[if IE 9]>
+    .... some HTML here ....
+<![endif]--
+
+The CSS padding property defines a padding (space) between the text and the border:
+
+#external references
+
+ <link rel="stylesheet" href="https://www.w3schools.com/html/styles.css"> 
+
+#target
+The target attribute specifies where to open the linked document.
+
+The target attribute can have one of the following values:
+
+    _blank - Opens the linked document in a new window or tab
+    _self - Opens the linked document in the same window/tab as it was clicked (this is default)
+    _parent - Opens the linked document in the parent frame
+    _top - Opens the linked document in the full body of the window
+    framename - Opens the linked document in a named frame
+
+To make a cell span more than one column, use the colspan attribute:
+
+To make a cell span more than one row, use the rowspan attribute:
+
+
+<code>
+x = 5;<br>
+y = 6;<br>
+z = x + y;
+</code> 
+
+#<kbd> element represents user input, like keyboard input or voice commands.
+ <p>Save the document by pressing <kbd>Ctrl + S</kbd></p> 

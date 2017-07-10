@@ -116,6 +116,8 @@ inner join aircraft as a
 on c.aid=a.aid
 where a.cruisingrange>3000 and a.aname!='jet airlines';
 
+
+
 j)select avg(e1.salary)-avg(e2.salary)
 from employees as e1,employees as e2
 inner join certified as c
