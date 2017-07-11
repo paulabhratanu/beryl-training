@@ -1,0 +1,48 @@
+#getElementById
+
+One of many JavaScript HTML methods is getElementById().
+This example uses the method to "find" an HTML element (with id="demo") and changes the element content (innerHTML) to "Hello JavaScript":
+
+*show hidden elements-><p id="demo" style="display:none">Hello JavaScript!</p>
+                      <button type="button" onclick="document.getElementById('demo').style.display='block'">Click Me!</button>
+
+*place javascript in external file-><script src="myScript.js"></script>
+
+*using window to display data-><script>
+                               window.alert(5 + 6);
+                               </script>
+
+*For debugging purpose-><script>
+                        console.log(5 + 6);
+                        </script>
+
+*JavaScript is Case Sensitive
+
+*If you re-declare a JavaScript variable, it will not lose its value.
+
+*If you put a number in quotes, the rest of the numbers will be treated as strings, and concatenated.
+
+*When adding a number and a string, JavaScript will treat the number as a string.
+
+*The typeof operator returns the type of a variable or an expression:
+     ->The typeof operator returns "object" for arrays because in JavaScript arrays are objects.
+
+*Do Not Declare Strings, Numbers, and Booleans as Objects!->It slows down execution;
+
+*If you assign a value to a variable that has not been declared, it will automatically become a GLOBAL variable.
+
+*The lifetime of a JavaScript variable starts when it is declared.
+      ->Local variables are deleted when the function is completed.
+      ->In a web browser, global variables are deleted when you close the browser window (or tab), but remains available to new pages   loaded into the same window.
+
+*Finding a string in a string->var str = "Please locate where 'locate' occurs!";
+                               var pos = str.indexOf("locate");
+
+*can use the toString() method to output numbers as base 16 (hex), base 8 (octal), or base 2 (binary).
+              ->number.toString(16)[hexa]
+              ->number.toString(8)[octal]
+
+*Math.floor(Math.random() * 10);     // returns a number between 0 and 9
+
+*There is no need to use the JavaScript's built-in array constructor new Array().
+  ->Use [] instead.
