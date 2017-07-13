@@ -107,7 +107,3 @@ function myfunction()
 		message.innerHTML="input is " + err;
 	}
 }
-function link()
-{
- document.getElementById("link").innerHTML="hello"
-}

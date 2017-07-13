@@ -7,7 +7,7 @@
 </head>
 <body>
 <p id="demo">My first javascript program</p>
-<a id="link" onclick="link()">click</a>
+<a href=" " id="link" onclick="link()">click</a>
 <p id="change">change the paragraph</p>
 <p id="hide">Hide me</p>
 <p id="expr"></p>
