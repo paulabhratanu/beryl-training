@@ -1,0 +1,40 @@
+cd /home/apal/.rvm/gems/ruby-2.4.0
+http://guides.rubyonrails.org/active_record_migrations.html
+http://guides.rubyonrails.org/active_record_querying.html
+http://guides.rubyonrails.org/association_basics.html
+http://guides.rubyonrails.org/active_record_validations.html
+
+#create a model
+rails generate model hospital
+OR
+$ bin/rails generate model Product name:string description:text
+
+
+#create database
+rake db:create
+
+#insert elements
+rails c
+customer=Customer.new
+customer.age=10
+
+#migrate
+rails db:migrate 
+
+#add a column
+rails g migration add_column_age_to_customers
+
+#queries
+
+-retrieve all values
+customer=Customer.all
+
+-insert elements
+customer=Customer.new
+customer.age=10
+OR
+user = User.create(name: "David", occupation: "Code Artist")
+
+-update
+user = User.find_by(name: 'David')
+user.update(name: 'Dave')
