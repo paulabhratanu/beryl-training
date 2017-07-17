@@ -4,10 +4,28 @@ http://guides.rubyonrails.org/active_record_querying.html
 http://guides.rubyonrails.org/association_basics.html
 http://guides.rubyonrails.org/active_record_validations.html
 
+#rails datatype
+
+    :binary
+    :boolean
+    :date
+    :datetime
+    :decimal
+    :float
+    :integer
+    :bigint
+    :primary_key
+    :references
+    :string
+    :text
+    :time
+    :timestamp
+
+
 #create a model
 rails generate model hospital
 OR
-$ bin/rails generate model Product name:string description:text
+rails generate model Product name:string description:text
 
 
 #create database
@@ -21,8 +39,58 @@ customer.age=10
 #migrate
 rails db:migrate 
 
-#add a column
-rails g migration add_column_age_to_customers
+-Addcolumn
+$ bin/rails generate migration AddDetailsToProducts part_number:string price:decimal
+
+generates
+class AddDetailsToProducts < ActiveRecord::Migration[5.0]
+  def change
+    add_column :products, :part_number, :string
+    add_column :products, :price, :decimal
+  end
+end
+
+-removecolumn
+$ bin/rails generate migration RemovePartNumberFromProducts part_number:string
+
+generates
+class RemovePartNumberFromProducts < ActiveRecord::Migration[5.0]
+  def change
+    remove_column :products, :part_number, :string
+  end
+end
+
+$ bin/rails generate migration CreateProducts name:string part_number:string
+
+generates
+class CreateProducts < ActiveRecord::Migration[5.0]
+  def change
+    create_table :products do |t|
+      t.string :name
+      t.string :part_number
+    end
+  end
+end
+
+-adduserreference
+$ bin/rails generate migration AddUserRefToProducts user:references
+
+generates
+class AddUserRefToProducts < ActiveRecord::Migration[5.0]
+  def change
+    add_reference :products, :user, foreign_key: true
+  end
+end
+
+*The migration method create_join_table creates an HABTM (has and belongs to many) join table.
+
+-change column
+change_column :products, :part_number, :text
+
+$ bin/rails db:migrate VERSION=20080906120000->run migrations until it has reached here
+$ bin/rails db:rollback STEP=3->will revert the last 3 migrations
+$ bin/rails db:migrate:up VERSION=20080906120000->If you need to run a specific migration up or down, the db:migrate:up and db:migrate:down tasks will do that
+
 
 #queries
 
@@ -38,3 +106,303 @@ user = User.create(name: "David", occupation: "Code Artist")
 -update
 user = User.find_by(name: 'David')
 user.update(name: 'Dave')
+
+-joins
+Item.joins("inner join customers on customers.id=items.customer_id")
+
+**scope
+**enums
+
+-method chaining
+Person
+  .select('people.id, people.name, comments.text')
+  .joins(:comments)
+  .where('comments.created_at > ?', 1.week.ago)
+
+-using own sql
+Customer.find_by_sql("select * from items where id=1")
+Item.find_by_sql("select distinct i.name,i.price
+from customers as c
+inner join items as i
+on c.id=i.id")
+
+-pluck
+Client.pluck(:id, :name)
+
+Client.where(first_name: 'Ryan').count
+# SELECT count(*) AS count_all FROM clients WHERE (first_name = 'Ryan')
+
+Client.average("orders_count")
+Client.sum("orders_count")
+Client.maximum("orders_count")
+
+#validations
+class Person < ApplicationRecord
+  validates :name, presence: true
+end
+ 
+Person.create(name: "John Doe").valid? # => true
+Person.create(name: nil).valid? # => false
+
+-acceptance
+class Person < ApplicationRecord
+  validates :terms_of_service, acceptance: true
+end
+
+This check is performed only if terms_of_service is not nil. The default error message for this helper is "must be accepted". You can also pass custom message via the message option.
+
+-validates_associated
+You should use this helper when your model has associations with other models and they also need to be validated. When you try to save your object, valid? will be called upon each one of the associated objects.
+class Library < ApplicationRecord
+  has_many :books
+  validates_associated :books
+end
+
+-confirmation
+You should use this helper when you have two text fields that should receive exactly the same content. For example, you may want to confirm an email address or a password. This validation creates a virtual attribute whose name is the name of the field that has to be confirmed with "_confirmation" appended.
+class Person < ApplicationRecord
+  validates :email, confirmation: true
+end
+
+In your view template you could use something like
+<%= text_field :person, :email %>
+<%= text_field :person, :email_confirmation %>
+
+There is also a :case_sensitive option that you can use to define whether the confirmation constraint will be case sensitive or not. This option defaults to true.
+class Person < ApplicationRecord
+  validates :email, confirmation: { case_sensitive: false }
+end
+
+-format
+This helper validates the attributes' values by testing whether they match a given regular expression, which is specified using the :with option.
+class Product < ApplicationRecord
+  validates :legacy_code, format: { with: /\A[a-zA-Z]+\z/,
+    message: "only allows letters" }
+end
+
+-inclusion
+This helper validates that the attributes' values are included in a given set. In fact, this set can be any enumerable object.
+class Coffee < ApplicationRecord
+  validates :size, inclusion: { in: %w(small medium large),
+    message: "%{value} is not a valid size" }
+end
+
+-length
+This helper validates the length of the attributes' values. It provides a variety of options, so you can specify length constraints in different ways:
+class Person < ApplicationRecord
+  validates :name, length: { minimum: 2 }
+  validates :bio, length: { maximum: 500 }
+  validates :password, length: { in: 6..20 }
+  validates :registration_number, length: { is: 6 }
+end
+
+class Person < ApplicationRecord
+  validates :bio, length: { maximum: 1000,
+    too_long: "%{count} characters is the maximum allowed" }
+end
+
+-numericality
+This helper validates that your attributes have only numeric values. By default, it will match an optional sign followed by an integral or floating point number. To specify that only integral numbers are allowed set :only_integer to true.
+class Player < ApplicationRecord
+  validates :points, numericality: true
+  validates :games_played, numericality: { only_integer: true }
+end
+
+-presence
+If you want to be sure that an association is present, you'll need to test whether the associated object itself is present, and not the foreign key used to map the association.
+class LineItem < ApplicationRecord
+  belongs_to :order
+  validates :order, presence: true
+end
+
+In order to validate associated records whose presence is required, you must specify the :inverse_of option for the association:
+class Order < ApplicationRecord
+  has_many :line_items, inverse_of: :order
+end
+
+-absence
+This helper validates that the specified attributes are absent. It uses the present? method to check if the value is not either nil or a blank string, that is, a string that is either empty or consists of whitespace.
+class Person < ApplicationRecord
+  validates :name, :login, :email, absence: true
+end
+
+-uniqueness
+This helper validates that the attribute's value is unique right before the object gets saved. It does not create a uniqueness constraint in the database, so it may happen that two different database connections create two records with the same value for a column that you intend to be unique. To avoid that, you must create a unique index on that column in your database.
+class Account < ApplicationRecord
+  validates :email, uniqueness: true
+end
+
+class Person < ApplicationRecord
+  validates :name, uniqueness: { case_sensitive: false }
+end
+
+-validates_with
+This helper passes the record to a separate class for validation.
+if you want to manually handle error
+class GoodnessValidator < ActiveModel::Validator
+  def validate(record)
+    if record.first_name == "Evil"
+      record.errors[:base] << "This person is evil"
+    end
+  end
+end
+ 
+class Person < ApplicationRecord
+  validates_with GoodnessValidator
+end
+
+-validates_each
+This helper validates attributes against a block. It doesn't have a predefined validation function. You should create one using a block, and every attribute passed to validates_each will be tested against it. In the following example, we don't want names and surnames to begin with lower case.
+class Person < ApplicationRecord
+  validates_each :name, :surname do |record, attr, value|
+    record.errors.add(attr, 'must start with upper case') if value =~ /\A[[:lower:]]/
+  end
+end
+
+-allow_blank
+The :allow_blank option is similar to the :allow_nil option. This option will let validation pass if the attribute's value is blank?, like nil or an empty string for example.
+class Topic < ApplicationRecord
+  validates :title, length: { is: 5 }, allow_blank: true
+end
+ 
+Topic.create(title: "").valid?  # => true
+Topic.create(title: nil).valid? # => true
+
+-message
+class Person < ApplicationRecord
+  # Hard-coded message
+  validates :name, presence: { message: "must be given please" }
+ 
+  # Message with dynamic attribute value. %{value} will be replaced with
+  # the actual value of the attribute. %{attribute} and %{model} also
+  # available.
+  validates :age, numericality: { message: "%{value} seems wrong" }
+ 
+  # Proc
+  validates :username,
+    uniqueness: {
+      # object = person object being validated
+      # data = { model: "Person", attribute: "Username", value: <username> }
+      message: ->(object, data) do
+        "Hey #{object.name}!, #{data[:value]} is taken already! Try again #{Time.zone.tomorrow}"
+      end
+    }
+end
+
+-inverse_of
+class Order < ApplicationRecord
+  has_many :line_items, inverse_of: :order
+end
+
+If you validate the presence of an object associated via a has_one or has_many relationship, it will check that the object is neither blank? nor marked_for_destruction?.
+
+-on
+The :on option lets you specify when the validation should happen
+class Person < ApplicationRecord
+  # it will be possible to update email with a duplicated value
+  validates :email, uniqueness: true, on: :create
+ 
+  # it will be possible to create the record with a non-numerical age
+  validates :age, numericality: true, on: :update
+ 
+  # the default (validates on both create and update)
+  validates :name, presence: true
+end
+
+-strict 
+You can also specify validations to be strict and raise ActiveModel::StrictValidationFailed when the object is invalid.
+class Person < ApplicationRecord
+  validates :name, presence: { strict: true }
+end
+ 
+Person.new.valid?  # => ActiveModel::StrictValidationFailed: Name can't be blank
+
+-if and unless
+:if option when you want to specify when the validation should happen.
+:unless option specify when the validation should not happen.
+class Order < ApplicationRecord
+  validates :card_number, presence: true, if: :paid_with_card?
+ 
+  def paid_with_card?
+    payment_type == "card"
+  end
+end
+
+class Account < ApplicationRecord
+  validates :password, confirmation: true,
+    unless: Proc.new { |a| a.password.blank? }
+end
+
+-errors.add
+class Person < ApplicationRecord
+  def a_method_used_for_validation_purposes
+    errors.add(:name, "cannot contain the characters !@#%*()_-+=")
+  end
+end
+ 
+person = Person.create(name: "!@#")
+ 
+person.errors[:name]
+ # => ["cannot contain the characters !@#%*()_-+="]
+ 
+person.errors.full_messages
+
+-errors.detail
+You can specify a validator type to the returned error details hash using the errors.add method.
+class Person < ApplicationRecord
+  def a_method_used_for_validation_purposes
+    errors.add(:name, :invalid_characters)
+  end
+end
+ 
+person = Person.create(name: "!@#")
+ 
+person.errors.details[:name]
+# => [{error: :invalid_characters}]
+
+-errors.size
+The size method returns the total number of error messages for the object.
+class Person < ApplicationRecord
+  validates :name, presence: true, length: { minimum: 3 }
+end
+ 
+person = Person.new
+person.valid? # => false
+person.errors.size # => 2
+ 
+person = Person.new(name: "Andrea", email: "andrea@example.com")
+person.valid? # => true
+person.errors.size # => 0
+ # => ["Name cannot contain the characters !@#%*()_-+="]
+
+doctor = Doctor.last
+patient=doctor.patients.create(id:205,name: "atul",age: 20,weight: 40,gender: "male",address: "18B street",phone_no:"9913531434",disease: "fever",doctor_id:104)
+
+ patient=Patient.create(id:205,name: "atul",age: 20,weight: 40,gender: "male",address: "18B street",phone_no:"9913531434",disease: "fever",doctor_id:104)
+lab=Lab.create(weight:20,category:"S",amount:1000,patient_id:201,doctor_id:102,date:"2013-05-2")
+doctor=Doctor.create(id:105,doctor_name:"Dr farooq",dept:"medicine")
+
+#associations
+For belongs_to associations you need to create foreign keys, and for has_and_belongs_to_many associations you need to create the appropriate join table.
+
+-has and belongs to many
+class Assembly < ApplicationRecord
+  has_and_belongs_to_many :parts
+end
+ 
+class Part < ApplicationRecord
+  has_and_belongs_to_many :assemblies
+end
+
+class CreateAssembliesPartsJoinTable < ActiveRecord::Migration[5.0]
+  def change
+    create_table :assemblies_parts, id: false do |t|
+      t.integer :assembly_id
+      t.integer :part_id
+    end
+ 
+    add_index :assemblies_parts, :assembly_id
+    add_index :assemblies_parts, :part_id
+  end
+end
+

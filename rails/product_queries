@@ -2,75 +2,238 @@
    (0.5ms)  SET NAMES utf8,  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483
   Customer Load (0.6ms)  SELECT  `customers`.* FROM `customers` WHERE `customers`.`id` = 1 LIMIT 1
  => #<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 11:11:51", age: nil> 
+
 2.4.0 :002 > customer.update(age:10)
    (0.4ms)  BEGIN
   SQL (0.7ms)  UPDATE `customers` SET `updated_at` = '2017-07-14 12:18:00', `age` = 10 WHERE `customers`.`id` = 1
    (371.2ms)  COMMIT
  => true 
+
 2.4.0 :003 > customer=Customer.find_by(id:2)
   Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` WHERE `customers`.`id` = 2 LIMIT 1
  => #<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-14 11:13:00", age: nil> 
+
 2.4.0 :004 > customer.update(age:20)
    (0.4ms)  BEGIN
   SQL (0.6ms)  UPDATE `customers` SET `updated_at` = '2017-07-14 12:18:08', `age` = 20 WHERE `customers`.`id` = 2
    (45.1ms)  COMMIT
  => true 
+
 2.4.0 :005 > customer=Customer.find_by(id:3)
   Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` WHERE `customers`.`id` = 3 LIMIT 1
  => #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 10:58:11", age: nil> 
+
 2.4.0 :006 > customer.update(age:30)
    (0.4ms)  BEGIN
   SQL (0.7ms)  UPDATE `customers` SET `updated_at` = '2017-07-14 12:18:15', `age` = 30 WHERE `customers`.`id` = 3
    (50.5ms)  COMMIT
  => true 
+
 2.4.0 :007 > customer=Customer.find_by(id:4)
   Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` WHERE `customers`.`id` = 4 LIMIT 1
  => #<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-14 11:02:41", age: nil> 
+
 2.4.0 :008 > customer.update(age:40)
    (0.4ms)  BEGIN
   SQL (0.6ms)  UPDATE `customers` SET `updated_at` = '2017-07-14 12:18:24', `age` = 40 WHERE `customers`.`id` = 4
    (54.1ms)  COMMIT
  => true 
+
 2.4.0 :009 > customer=Customer.find(1)
   Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` WHERE `customers`.`id` = 1 LIMIT 1
  => #<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10> 
+
 2.4.0 :010 > customer=Customer.find([1,3])
   Customer Load (0.8ms)  SELECT `customers`.* FROM `customers` WHERE `customers`.`id` IN (1, 3)
  => [#<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30>] 
+
 2.4.0 :011 > customer=Customer.take
   Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` LIMIT 1
  => #<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10> 
+
 2.4.0 :012 > customer=Customer.take(2)
   Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` LIMIT 2
  => [#<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10>, #<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-14 12:18:08", age: 20>] 
+
 2.4.0 :013 > customer=Customer.order(:name).first
   Customer Load (0.8ms)  SELECT  `customers`.* FROM `customers` ORDER BY `customers`.`name` ASC LIMIT 1
  => #<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10> 
+
 2.4.0 :014 > Customer.find_by name:'paul'
   Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` WHERE `customers`.`name` = 'paul' LIMIT 1
  => #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30> 
+
 2.4.0 :019 > Customer.where("name=? and age=?", "paul",30)
   Customer Load (0.8ms)  SELECT  `customers`.* FROM `customers` WHERE (name='paul' and age=30) LIMIT 11
  => #<ActiveRecord::Relation [#<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30>]> 
+
 2.4.0 :020 > Customer.where("age >?",30)
   Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` WHERE (age >30) LIMIT 11
  => #<ActiveRecord::Relation [#<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-14 12:18:24", age: 40>]> 
+
 2.4.0 :021 > Customer.where("age >?",10)
   Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` WHERE (age >10) LIMIT 11
  => #<ActiveRecord::Relation [#<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-14 12:18:08", age: 20>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30>, #<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-14 12:18:24", age: 40>]> 
+
 2.4.0 :022 > Customer.where(age:10..50)
   Customer Load (0.6ms)  SELECT  `customers`.* FROM `customers` WHERE (`customers`.`age` BETWEEN 10 AND 50) LIMIT 11
  => #<ActiveRecord::Relation [#<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10>, #<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-14 12:18:08", age: 20>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30>, #<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-14 12:18:24", age: 40>]> 
+
 2.4.0 :023 > Customer.where(age: [10,30])
   Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` WHERE `customers`.`age` IN (10, 30) LIMIT 11
  => #<ActiveRecord::Relation [#<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30>]> 
+
 2.4.0 :024 > Customer.where.not(id: true)
   Customer Load (0.8ms)  SELECT  `customers`.* FROM `customers` WHERE (`customers`.`id` != 1) LIMIT 11
  => #<ActiveRecord::Relation [#<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-14 12:18:08", age: 20>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30>, #<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-14 12:18:24", age: 40>]> 
+
 2.4.0 :025 > Customer.order(:age)
   Customer Load (0.8ms)  SELECT  `customers`.* FROM `customers` ORDER BY `customers`.`age` ASC LIMIT 11
  => #<ActiveRecord::Relation [#<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10>, #<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-14 12:18:08", age: 20>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30>, #<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-14 12:18:24", age: 40>]> 
+
 2.4.0 :026 > Customer.order(age: :asc)
   Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` ORDER BY `customers`.`age` ASC LIMIT 11
  => #<ActiveRecord::Relation [#<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10>, #<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-14 12:18:08", age: 20>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30>, #<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-14 12:18:24", age: 40>]>
+
+ Customer.order(:created_at)
+   (0.6ms)  SET NAMES utf8,  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483
+  Customer Load (0.6ms)  SELECT  `customers`.* FROM `customers` ORDER BY `customers`.`created_at` ASC LIMIT 11
+ => #<ActiveRecord::Relation [#<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10>, #<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-14 12:18:08", age: 20>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30>, #<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-14 12:18:24", age: 40>]> 
+
+2.4.0 :002 > Customer.order(created_at: :desc)
+  Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` ORDER BY `customers`.`created_at` DESC LIMIT 11
+ => #<ActiveRecord::Relation [#<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-14 12:18:24", age: 40>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30>, #<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-14 12:18:08", age: 20>, #<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10>]> 
+
+2.4.0 :003 > Customer.order(created_at: :desc ,age: :asc)
+  Customer Load (0.8ms)  SELECT  `customers`.* FROM `customers` ORDER BY `customers`.`created_at` DESC, `customers`.`age` ASC LIMIT 11
+ => #<ActiveRecord::Relation [#<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-14 12:18:24", age: 40>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-14 12:18:15", age: 30>, #<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-14 12:18:08", age: 20>, #<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-14 12:18:00", age: 10>]> 
+
+2.4.0 :004 > Customer.select("created_at,locked")
+  Customer Load (1.4ms)  SELECT  created_at,locked FROM `customers` LIMIT 11
+ActiveRecord::StatementInvalid: Mysql2::Error: Unknown column 'locked' in 'field list': SELECT  created_at,locked FROM `customers` LIMIT 11
+
+2.4.0 :005 > Customer.select("created_at")
+  Customer Load (0.7ms)  SELECT  `customers`.`created_at` FROM `customers` LIMIT 11
+ => #<ActiveRecord::Relation [#<Customer id: nil, created_at: "2017-07-14 10:25:33">, #<Customer id: nil, created_at: "2017-07-14 10:52:19">, #<Customer id: nil, created_at: "2017-07-14 10:57:37">, #<Customer id: nil, created_at: "2017-07-14 11:02:41">]> 
+
+2.4.0 :006 > Customer.select(:name).distinct
+  Customer Load (0.7ms)  SELECT  DISTINCT `customers`.`name` FROM `customers` LIMIT 11
+ => #<ActiveRecord::Relation [#<Customer id: nil, name: "mohan">, #<Customer id: nil, name: "rahul">, #<Customer id: nil, name: "paul">, #<Customer id: nil, name: "rohan">]> 
+
+2.4.0 :007 > customer=Customer.select(:name).distinct
+  Customer Load (0.7ms)  SELECT  DISTINCT `customers`.`name` FROM `customers` LIMIT 11
+ => #<ActiveRecord::Relation [#<Customer id: nil, name: "mohan">, #<Customer id: nil, name: "rahul">, #<Customer id: nil, name: "paul">, #<Customer id: nil, name: "rohan">]> 
+
+2.4.0 :008 > customer.distinct(false)
+  Customer Load (0.7ms)  SELECT  `customers`.`name` FROM `customers` LIMIT 11
+ => #<ActiveRecord::Relation [#<Customer id: nil, name: "mohan">, #<Customer id: nil, name: "rahul">, #<Customer id: nil, name: "paul">, #<Customer id: nil, name: "rohan">]> 
+
+2.4.0 :009 > customer.limit(2).offset(2)
+  Customer Load (0.6ms)  SELECT  DISTINCT `customers`.`name` FROM `customers` LIMIT 2 OFFSET 2
+ => #<ActiveRecord::Relation [#<Customer id: nil, name: "paul">, #<Customer id: nil, name: "rohan">]> 
+
+2.4.0 :022 > Item.select("date(created_at) as ordered_date,sum(price) as total_price").group("date(created_at)")
+  Item Load (0.6ms)  SELECT  date(created_at) as ordered_date,sum(price) as total_price FROM `items` GROUP BY date(created_at) LIMIT 11
+ => #<ActiveRecord::Relation [#<Item id: nil>]> 
+
+2.4.0 :023 > Item.select("date(created_at) as ordered_date,sum(price) as total_price").group("sum(price)")
+  Item Load (1.3ms)  SELECT  date(created_at) as ordered_date,sum(price) as total_price FROM `items` GROUP BY sum(price) LIMIT 11
+ActiveRecord::StatementInvalid: Mysql2::Error: Invalid use of group function: SELECT  date(created_at) as ordered_date,sum(price) as total_price FROM `items` GROUP BY sum(price) LIMIT 11
+
+2.4.0 :024 > Customer.select("date(created_at) as ordered_date,sum(age) as total_age").group("date(created_at)")
+  Customer Load (0.8ms)  SELECT  date(created_at) as ordered_date,sum(age) as total_age FROM `customers` GROUP BY date(created_at) LIMIT 11
+ => #<ActiveRecord::Relation [#<Customer id: nil>]> 
+
+
+2.4.0 :026 > Item.group(:price).count
+   (0.8ms)  SELECT COUNT(*) AS count_all, `items`.`price` AS items_price FROM `items` GROUP BY `items`.`price`
+ => {1000=>1, 3000=>1, 4000=>1} 
+
+2.4.0 :028 > Item.select("name,sum(price)").group("name").having("sum(price)>?",2000)
+  Item Load (0.8ms)  SELECT  name,sum(price) FROM `items` GROUP BY `items`.`name` HAVING (sum(price)>2000) LIMIT 11
+ => #<ActiveRecord::Relation [#<Item id: nil, name: "oil">, #<Item id: nil, name: "shampoo">]> 
+
+2.4.0 :029 > Item.where('id > 2').limit(10).order('id asc').unscope(:order)
+  Item Load (0.8ms)  SELECT  `items`.* FROM `items` WHERE (id > 2) LIMIT 10
+ => #<ActiveRecord::Relation [#<Item id: 3, name: "oil", description: "costly", created_at: "2017-07-14 11:28:39", updated_at: "2017-07-14 11:58:02", price: 4000, customer_id: 3>]>
+ 
+2.4.0 :030 > Item.where('id > 2').limit(10).order('id asc').unscope(where: :id)  Item Load (0.9ms)  SELECT  `items`.* FROM `items` WHERE (id > 2) ORDER BY id asc LIMIT 10
+ => #<ActiveRecord::Relation [#<Item id: 3, name: "oil", description: "costly", created_at: "2017-07-14 11:28:39", updated_at: "2017-07-14 11:58:02", price: 4000, customer_id: 3>]> 
+
+2.4.0 :031 > Item.where('id>1').limit(10).order('id desc')
+  Item Load (0.8ms)  SELECT  `items`.* FROM `items` WHERE (id>1) ORDER BY id desc LIMIT 10
+ => #<ActiveRecord::Relation [#<Item id: 3, name: "oil", description: "costly", created_at: "2017-07-14 11:28:39", updated_at: "2017-07-14 11:58:02", price: 4000, customer_id: 3>, #<Item id: 2, name: "shampoo", description: "costly", created_at: "2017-07-14 11:27:45", updated_at: "2017-07-14 11:57:50", price: 3000, customer_id: 1>]> 
+
+2.4.0 :032 > Item.where('id>1').limit(10).order('id desc').only(:order,:where)
+  Item Load (0.8ms)  SELECT  `items`.* FROM `items` WHERE (id>1) ORDER BY id desc LIMIT 11
+ => #<ActiveRecord::Relation [#<Item id: 3, name: "oil", description: "costly", created_at: "2017-07-14 11:28:39", updated_at: "2017-07-14 11:58:02", price: 4000, customer_id: 3>, #<Item id: 2, name: "shampoo", description: "costly", created_at: "2017-07-14 11:27:45", updated_at: "2017-07-14 11:57:50", price: 3000, customer_id: 1>]> 
+
+2.4.0 :033 > Item.where('id>1').limit(5).order('id desc').only(:order,:where)
+  Item Load (0.8ms)  SELECT  `items`.* FROM `items` WHERE (id>1) ORDER BY id desc LIMIT 11
+ => #<ActiveRecord::Relation [#<Item id: 3, name: "oil", description: "costly", created_at: "2017-07-14 11:28:39", updated_at: "2017-07-14 11:58:02", price: 4000, customer_id: 3>, #<Item id: 2, name: "shampoo", description: "costly", created_at: "2017-07-14 11:27:45", updated_at: "2017-07-14 11:57:50", price: 3000, customer_id: 1>]> 
+
+2.4.0 :034 > Item.where('id>1').limit(5).order('id desc')
+  Item Load (0.6ms)  SELECT  `items`.* FROM `items` WHERE (id>1) ORDER BY id desc LIMIT 5
+ => #<ActiveRecord::Relation [#<Item id: 3, name: "oil", description: "costly", created_at: "2017-07-14 11:28:39", updated_at: "2017-07-14 11:58:02", price: 4000, customer_id: 3>, #<Item id: 2, name: "shampoo", description: "costly", created_at: "2017-07-14 11:27:45", updated_at: "2017-07-14 11:57:50", price: 3000, customer_id: 1>]> 
+
+tem.where("price > 2000").order(:name).reverse_order
+  Item Load (0.8ms)  SELECT  `items`.* FROM `items` WHERE (price > 2000) ORDER BY `items`.`name` DESC LIMIT 11
+ => #<ActiveRecord::Relation [#<Item id: 2, name: "shampoo", description: "costly", created_at: "2017-07-14 11:27:45", updated_at: "2017-07-14 11:57:50", price: 3000, customer_id: 1>, #<Item id: 3, name: "oil", description: "costly", created_at: "2017-07-14 11:28:39", updated_at: "2017-07-14 11:58:02", price: 4000, customer_id: 3>]> 
+
+2.4.0 :038 > Item.where(price:1000).rewhere(price:2000)
+  Item Load (0.7ms)  SELECT  `items`.* FROM `items` WHERE `items`.`price` = 2000 LIMIT 11
+ => #<ActiveRecord::Relation []> 
+
+2.4.0 :039 > Item.where(price:1000).rewhere(price:3000)
+  Item Load (0.8ms)  SELECT  `items`.* FROM `items` WHERE `items`.`price` = 3000 LIMIT 11
+ => #<ActiveRecord::Relation [#<Item id: 2, name: "shampoo", description: "costly", created_at: "2017-07-14 11:27:45", updated_at: "2017-07-14 11:57:50", price: 3000, customer_id: 1>]> 
+
+2.4.0 :040 > item=Item.readonly.first
+  Item Load (0.7ms)  SELECT  `items`.* FROM `items` ORDER BY `items`.`id` ASC LIMIT 1
+ => #<Item id: 1, name: "soap", description: "cheap", created_at: "2017-07-14 10:23:38", updated_at: "2017-07-14 11:57:37", price: 1000, customer_id: 2> 
+
+2.4.0 :041 > item.price+=2
+ => 1002 
+2.4.0 :042 > item.save
+   (0.4ms)  BEGIN
+   (0.3ms)  ROLLBACK
+
+                              ^
+
+2.4.0 :047 > Item.joins("inner join customers on customers.id=items.customer_id")
+  Item Load (13.6ms)  SELECT  `items`.* FROM `items` inner join customers on customers.id=items.customer_id LIMIT 11
+ => #<ActiveRecord::Relation [#<Item id: 1, name: "soap", description: "cheap", created_at: "2017-07-14 10:23:38", updated_at: "2017-07-14 11:57:37", price: 1000, customer_id: 2>, #<Item id: 2, name: "shampoo", description: "costly", created_at: "2017-07-14 11:27:45", updated_at: "2017-07-14 11:57:50", price: 3000, customer_id: 1>, #<Item id: 3, name: "oil", description: "costly", created_at: "2017-07-14 11:28:39", updated_at: "2017-07-14 11:58:02", price: 4000, customer_id: 3>]> 
+
+2.4.0 :006 > customer=Customer.includes(:item).limit(10)
+  Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` LIMIT 10
+  Item Load (17.1ms)  SELECT `items`.* FROM `items` WHERE `items`.`id` IN (2, 1, 3)
+ => #<ActiveRecord::Relation [#<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-15 08:22:38", age: 10, items_id: nil, item_id: 2>, #<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-15 08:23:17", age: 20, items_id: nil, item_id: 1>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-15 08:23:32", age: 30, items_id: nil, item_id: 1>, #<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-15 08:23:41", age: 40, items_id: nil, item_id: 3>]> 
+2.4.0 :007 > customer.each do |c|
+2.4.0 :008 >     puts c.item
+2.4.0 :009?>   end
+  Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` LIMIT 10
+  Item Load (0.6ms)  SELECT `items`.* FROM `items` WHERE `items`.`id` IN (2, 1, 3)
+#<Item:0xa203910>
+#<Item:0xa203c94>
+#<Item:0xa203c94>
+#<Item:0xa2035dc>
+ => [#<Customer id: 1, name: "mohan", created_at: "2017-07-14 10:25:33", updated_at: "2017-07-15 08:22:38", age: 10, items_id: nil, item_id: 2>, #<Customer id: 2, name: "rahul", created_at: "2017-07-14 10:52:19", updated_at: "2017-07-15 08:23:17", age: 20, items_id: nil, item_id: 1>, #<Customer id: 3, name: "paul", created_at: "2017-07-14 10:57:37", updated_at: "2017-07-15 08:23:32", age: 30, items_id: nil, item_id: 1>, #<Customer id: 4, name: "rohan", created_at: "2017-07-14 11:02:41", updated_at: "2017-07-15 08:23:41", age: 40, items_id: nil, item_id: 3>] 
+
+2.4.0 :034 > Item.select('items.id,items.name').joins(:customers).where('customers.age = ?',20)
+  Item Load (0.9ms)  SELECT  items.id,items.name FROM `items` INNER JOIN `customers` ON `customers`.`item_id` = `items`.`id` WHERE (customers.age = 20) LIMIT 11
+ => #<ActiveRecord::Relation [#<Item id: 1, name: "soap">]> 
+
+Item.select('items.id,items.name').joins(:customers).where('customers.name = ?','paul')
+  Item Load (0.9ms)  SELECT  items.id,items.name FROM `items` INNER JOIN `customers` ON `customers`.`item_id` = `items`.`id` WHERE (customers.name = 'paul') LIMIT 11
+ => #<ActiveRecord::Relation [#<Item id: 1, name: "soap">]> 
+
+2.4.0 :037 > Customer.find_or_create_by(name:'Andy')
+  Customer Load (0.7ms)  SELECT  `customers`.* FROM `customers` WHERE `customers`.`name` = 'Andy' LIMIT 1
+   (0.3ms)  BEGIN
+   (0.3ms)  ROLLBACK
+ => #<Customer id: nil, name: "Andy", created_at: nil, updated_at: nil, age: nil, items_id: nil, item_id: nil> 
+
+2.4.0 :045 > Customer.find_by_sql("select * from items where id=1")
+  Customer Load (0.8ms)  select * from items where id=1
+ => [#<Customer id: 1, name: "soap", created_at: "2017-07-14 10:23:38", updated_at: "2017-07-14 11:57:37">] 
 

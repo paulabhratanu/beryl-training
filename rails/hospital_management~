@@ -1,0 +1,75 @@
+Database changed
+mysql> show tables;
++--------------------------------------------------+
+| Tables_in_hospital_management_system_development |
++--------------------------------------------------+
+| ar_internal_metadata                             |
+| doctors                                          |
+| labs                                             |
+| patients                                         |
+| schema_migrations                                |
++--------------------------------------------------+
+5 rows in set (0.00 sec)
+
+mysql> desc patients;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id         | bigint(20)   | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(255) | YES  |     | NULL    |                |
+| age        | int(11)      | YES  |     | NULL    |                |
+| weight     | int(11)      | YES  |     | NULL    |                |
+| gender     | varchar(255) | YES  |     | NULL    |                |
+| address    | varchar(255) | YES  |     | NULL    |                |
+| phone_no   | varchar(255) | YES  |     | NULL    |                |
+| disease    | varchar(255) | YES  |     | NULL    |                |
+| created_at | datetime     | NO   |     | NULL    |                |
+| updated_at | datetime     | NO   |     | NULL    |                |
+| doctor_id  | bigint(20)   | YES  | MUL | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+11 rows in set (0.01 sec)
+
+mysql> desc doctors;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id          | bigint(20)   | NO   | PRI | NULL    | auto_increment |
+| doctor_name | varchar(255) | YES  |     | NULL    |                |
+| dept        | varchar(255) | YES  |     | NULL    |                |
+| created_at  | datetime     | NO   |     | NULL    |                |
+| updated_at  | datetime     | NO   |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> desc labs;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id         | bigint(20)   | NO   | PRI | NULL    | auto_increment |
+| weight     | int(11)      | YES  |     | NULL    |                |
+| date       | date         | YES  |     | NULL    |                |
+| category   | varchar(255) | YES  |     | NULL    |                |
+| amount     | int(11)      | YES  |     | NULL    |                |
+| created_at | datetime     | NO   |     | NULL    |                |
+| updated_at | datetime     | NO   |     | NULL    |                |
+| patient_id | bigint(20)   | YES  | MUL | NULL    |                |
+| doctor_id  | bigint(20)   | YES  | MUL | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+belongs_to :lab
+	belongs_to :doctor
+	validates_associated :lab
+	validates_associated :doctor
+	validates :phone_no,:presence => true
+
+has_many :patients,through: :doctors
+	has_many :doctors
+	validates_associated :patients
+	validates_associated :doctors
+	validates :date,:presence => true
+belongs_to :lab
+	has_many :patients
+	validates_associated :lab
+	validates_associated :patients
+	validates :dept,:presence => true
