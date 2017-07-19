@@ -1,0 +1,283 @@
+appointment=Appointment.create(id:300,time:'2017-5-2 12:15:12',doctor_id:100,patient_id:200)
+department=Department.create(id:400,name:'medicine')
+appointment=Appointment.create(time:'2017-5-2 12:15:12',doctor_id:100,patient_id:200)
+
+d=Doctor.last
+d.patients << Patient.last
+
+mysql> select * from doctors;
++-----+-----------+---------------------+---------------------+---------------+
+| id  | name      | created_at          | updated_at          | department_id |
++-----+-----------+---------------------+---------------------+---------------+
+| 100 | Dr Raj    | 2017-07-17 07:19:33 | 2017-07-18 12:21:26 |           400 |
+| 101 | Dr amit   | 2017-07-17 07:21:11 | 2017-07-18 12:59:37 |           402 |
+| 102 | Dr rahul  | 2017-07-17 07:21:59 | 2017-07-18 13:00:12 |           403 |
+| 103 | Dr rani   | 2017-07-17 07:22:25 | 2017-07-18 13:00:29 |           404 |
+| 104 | Dr jeykl  | 2017-07-17 07:23:10 | 2017-07-18 13:01:08 |           405 |
+| 105 | Dr farooq | 2017-07-17 11:45:54 | 2017-07-18 13:03:00 |           406 |
+| 106 | Dr gobar  | 2017-07-17 12:00:01 | 2017-07-18 13:03:20 |           407 |
+| 107 | Dr paul   | 2017-07-18 12:32:39 | 2017-07-18 12:32:39 |           401 |
+| 108 | Dr raju   | 2017-07-19 10:29:56 | 2017-07-19 10:29:56 |           403 |
++-----+-----------+---------------------+---------------------+---------------+
+
+8 rows in set (0.00 sec)
+
+mysql> select * from departments;
++-----+---------------+---------------------+---------------------+
+| id  | name          | created_at          | updated_at          |
++-----+---------------+---------------------+---------------------+
+| 400 | medicine      | 2017-07-18 09:33:29 | 2017-07-18 09:33:29 |
+| 401 | neurosurgon   | 2017-07-18 09:33:47 | 2017-07-18 09:33:47 |
+| 402 | opthamologist | 2017-07-18 09:34:10 | 2017-07-18 09:34:10 |
+| 403 | paediatrician | 2017-07-18 09:34:28 | 2017-07-18 09:34:28 |
+| 404 | orthopadic    | 2017-07-18 09:35:11 | 2017-07-18 09:35:11 |
+| 405 | gynacologist  | 2017-07-18 12:34:02 | 2017-07-18 12:34:02 |
+| 406 | nephrologist  | 2017-07-18 13:02:20 | 2017-07-18 13:02:20 |
+| 407 | neurologist   | 2017-07-18 13:02:44 | 2017-07-18 13:02:44 |
++-----+---------------+---------------------+---------------------+
+8 rows in set (0.00 sec)
+
+mysql> mysql> select * from appointments;
++-----+---------------------+-----------+------------+---------------------+---------------------+
+| id  | time                | doctor_id | patient_id | created_at          | updated_at          |
++-----+---------------------+-----------+------------+---------------------+---------------------+
+| 500 | 2017-05-02 12:15:12 |       100 |        200 | 2017-07-18 12:16:23 | 2017-07-18 12:16:23 |
+| 501 | 2017-06-02 13:15:15 |       106 |        211 | 2017-07-18 12:17:49 | 2017-07-18 12:17:49 |
+| 502 | 2013-09-11 12:06:07 |       101 |        201 | 2017-07-18 12:18:18 | 2017-07-19 10:08:18 |
+| 503 | 2013-11-11 12:06:07 |       102 |        202 | 2017-07-19 10:03:06 | 2017-07-19 10:08:37 |
+| 504 | 2015-04-03 14:23:23 |       102 |        203 | 2017-07-19 10:04:06 | 2017-07-19 10:04:06 |
+| 505 | 2015-04-23 14:13:13 |       103 |        204 | 2017-07-19 10:04:41 | 2017-07-19 10:04:41 |
+| 506 | 2015-07-23 14:13:13 |       105 |        207 | 2017-07-19 10:05:18 | 2017-07-19 10:05:18 |
+| 507 | 2013-11-11 12:06:17 |       101 |        208 | 2017-07-19 10:05:46 | 2017-07-19 10:10:20 |
+| 508 | 2015-12-23 14:13:13 |       108 |        204 | 2017-07-19 10:35:00 | 2017-07-19 10:35:00 |
+| 509 | 2014-12-23 14:23:13 |       108 |        203 | 2017-07-19 10:35:14 | 2017-07-19 10:35:14 |
++-----+---------------------+-----------+------------+---------------------+---------------------+
+
+8 rows in set (0.00 sec)
+
+
+mysql> select * from doctors_patients;
++------------+-----------+
+| patient_id | doctor_id |
++------------+-----------+
+|        211 |       106 |
+|        201 |       101 |
+|        202 |       102 |
+|        203 |       102 |
+|        204 |       103 |
+|        207 |       105 |
+|        208 |       101 |
+|        204 |       108 |
+|        203 |       108 |
++------------+-----------+
+9 rows in set (0.00 sec)
+
+7 rows in set (0.00 sec)
+
+
+mysql> select * from patients;
++-----+-------+------+--------+--------+------------+------------+----------+---------------------+---------------------+--------+
+| id  | name  | age  | weight | gender | address    | phone_no   | disease  | created_at          | updated_at          | height |
++-----+-------+------+--------+--------+------------+------------+----------+---------------------+---------------------+--------+
+| 200 | amit  |   20 |     30 | male   | 13B street | 9911431764 | typhoid  | 2017-07-17 07:24:08 | 2017-07-18 06:59:14 |    200 |
+| 201 | amir  |   10 |     40 | male   | 14B street | 9911431754 | cholera  | 2017-07-17 07:25:42 | 2017-07-18 15:19:01 |    130 |
+| 202 | rani  |   20 |     50 | female | 15B street | 9911431734 | cholera  | 2017-07-17 07:26:37 | 2017-07-18 15:19:12 |    140 |
+| 203 | ravi  |   30 |     70 | male   | 16B street | 9911431434 | jaundice | 2017-07-17 07:27:56 | 2017-07-18 15:19:21 |    150 |
+| 204 | aman  |   60 |     90 | male   | 17B street | 9913431434 | fever    | 2017-07-17 07:28:41 | 2017-07-18 15:19:28 |    160 |
+| 205 | atul  |   20 |     40 | male   | 18B street | 9913531434 | fever    | 2017-07-17 11:28:38 | 2017-07-18 15:19:35 |    170 |
+| 207 | atul  |   20 |     40 | male   | 18B street | 9913531434 | fever    | 2017-07-17 11:36:28 | 2017-07-18 15:20:13 |    180 |
+| 208 | atul  |   20 |     40 | male   | 18B street | 9913531434 | fever    | 2017-07-17 11:37:34 | 2017-07-18 15:20:24 |    190 |
+| 209 | paul  |   20 |     40 | male   | 20B street | 9917531434 | fever    | 2017-07-17 11:53:21 | 2017-07-18 15:20:33 |    110 |
+| 210 | agi   |   20 |     40 | male   | 21B street | 9923531434 | fever    | 2017-07-17 11:59:08 | 2017-07-18 15:20:42 |     90 |
+| 211 | rohan |   20 |     40 | male   | 21B street | 9923531434 | fever    | 2017-07-17 12:31:36 | 2017-07-18 15:20:50 |     80 |
+| 212 | raju  |   40 |     70 | male   | 19B street | 9911345876 | malaria  | 2017-07-18 12:31:08 | 2017-07-18 12:31:08 |    150 |
++-----+-------+------+--------+--------+------------+------------+----------+---------------------+---------------------+--------+
+12 rows in set (0.00 sec)
+
+
+
+
+2.4.0 :002 > patient=Patient.find(205)
+  Patient Load (0.7ms)  SELECT  `patients`.* FROM `patients` WHERE `patients`.`id` = 205 LIMIT 1
+ => #<Patient id: 205, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:28:38", updated_at: "2017-07-17 11:28:38", doctor_id: 104> 
+2.4.0 :003 > 
+
+
+2.4.0 :003 > patient=Patient.find(205)
+  Patient Load (0.7ms)  SELECT  `patients`.* FROM `patients` WHERE `patients`.`id` = 205 LIMIT 1
+ => #<Patient id: 205, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:28:38", updated_at: "2017-07-17 11:28:38", doctor_id: 104> 
+
+2.4.0 :004 > patient=Patient.find(206)
+  Patient Load (0.7ms)  SELECT  `patients`.* FROM `patients` WHERE `patients`.`id` = 206 LIMIT 1
+ => #<Patient id: 206, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:33:37", updated_at: "2017-07-17 11:33:37", doctor_id: 103> 
+
+2.4.0 :005 > patient.destroy
+   (0.3ms)  BEGIN
+  SQL (28.3ms)  DELETE FROM `patients` WHERE `patients`.`id` = 206
+   (31.3ms)  COMMIT
+ => #<Patient id: 206, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:33:37", updated_at: "2017-07-17 11:33:37", doctor_id: 103> 
+
+2.4.0 :006 > patient=Patient.find([200,205])
+  Patient Load (0.8ms)  SELECT `patients`.* FROM `patients` WHERE `patients`.`id` IN (200, 205)
+ => [#<Patient id: 200, name: "amit", age: 20, weight: 30, gender: "male", address: "13B street", phone_no: "9911431764", disease: "typhoid", created_at: "2017-07-17 07:24:08", updated_at: "2017-07-17 07:24:08", doctor_id: 101>, #<Patient id: 205, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:28:38", updated_at: "2017-07-17 11:28:38", doctor_id: 104>] 
+
+2.4.0 :007 > patient=Patient.take
+  Patient Load (0.6ms)  SELECT  `patients`.* FROM `patients` LIMIT 1
+ => #<Patient id: 200, name: "amit", age: 20, weight: 30, gender: "male", address: "13B street", phone_no: "9911431764", disease: "typhoid", created_at: "2017-07-17 07:24:08", updated_at: "2017-07-17 07:24:08", doctor_id: 101> 
+
+2.4.0 :008 > patient=Patient.take(3)
+  Patient Load (0.7ms)  SELECT  `patients`.* FROM `patients` LIMIT 3
+ => [#<Patient id: 200, name: "amit", age: 20, weight: 30, gender: "male", address: "13B street", phone_no: "9911431764", disease: "typhoid", created_at: "2017-07-17 07:24:08", updated_at: "2017-07-17 07:24:08", doctor_id: 101>, #<Patient id: 201, name: "rahul", age: 10, weight: 40, gender: "male", address: "14B street", phone_no: "9911431754", disease: "cholera", created_at: "2017-07-17 07:25:42", updated_at: "2017-07-17 07:25:42", doctor_id: 101>, #<Patient id: 202, name: "rani", age: 20, weight: 50, gender: "female", address: "15B street", phone_no: "9911431734", disease: "cholera", created_a
+
+patient=Patient.first
+  Patient Load (0.8ms)  SELECT  `patients`.* FROM `patients` ORDER BY `patients`.`id` ASC LIMIT 1
+ => #<Patient id: 200, name: "amit", age: 20, weight: 30, gender: "male", address: "13B street", phone_no: "9911431764", disease: "typhoid", created_at: "2017-07-17 07:24:08", updated_at: "2017-07-17 07:24:08", doctor_id: 101> 
+
+2.4.0 :012 >   patient=Patient.first(3)
+  Patient Load (0.7ms)  SELECT  `patients`.* FROM `patients` ORDER BY `patients`.`id` ASC LIMIT 3
+ => [#<Patient id: 200, name: "amit", age: 20, weight: 30, gender: "male", address: "13B street", phone_no: "9911431764", disease: "typhoid", created_at: "2017-07-17 07:24:08", updated_at: "2017-07-17 07:24:08", doctor_id: 101>, #<Patient id: 201, name: "rahul", age: 10, weight: 40, gender: "male", address: "14B street", phone_no: "9911431754", disease: "cholera", created_at: "2017-07-17 07:25:42", updated_at: "2017-07-17 07:25:42", doctor_id: 101>, #<Patient id: 202, name: "rani", age: 20, weight: 50, gender: "female", address: "15B street", phone_no: "9911431734", disease: "cholera", created_at: "2017-07-17 07:26:37", updated_at: "2017-07-17 07:26:37", doctor_id: 102>]
+ 
+2.4.0 :013 > patient=Patient.order(:name).first
+  Patient Load (0.8ms)  SELECT  `patients`.* FROM `patients` ORDER BY `patients`.`name` ASC LIMIT 1
+ => #<Patient id: 210, name: "agi", age: 20, weight: 40, gender: "male", address: "21B street", phone_no: "9923531434", disease: "fever", created_at: "2017-07-17 11:59:08", updated_at: "2017-07-17 11:59:08", doctor_id: 105> 
+
+2.4.0 :014 > patient=Patient.order(:name).first(5)
+  Patient Load (0.8ms)  SELECT  `patients`.* FROM `patients` ORDER BY `patients`.`name` ASC LIMIT 5
+ => [#<Patient id: 210, name: "agi", age: 20, weight: 40, gender: "male", address: "21B street", phone_no: "9923531434", disease: "fever", created_at: "2017-07-17 11:59:08", updated_at: "2017-07-17 11:59:08", doctor_id: 105>, #<Patient id: 204, name: "aman", age: 60, weight: 90, gender: "male", address: "17B street", phone_no: "9913431434", disease: "fever", created_at: "2017-07-17 07:28:41", updated_at: "2017-07-17 07:28:41", doctor_id: 104>, #<Patient id: 200, name: "amit", age: 20, weight: 30, gender: "male", address: "13B street", phone_no: "9911431764", disease: "typhoid", created_at: "2017-07-17 07:24:08", updated_at: "2017-07-17 07:24:08", doctor_id: 101>, #<Patient id: 205, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:28:38", updated_at: "2017-07-17 11:28:38", doctor_id: 104>, #<Patient id: 207, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:36:28", updated_at: "2017-07-17 11:36:28", doctor_id: 104>] 
+
+2.4.0 :015 > patient=Patient.last
+  Patient Load (0.7ms)  SELECT  `patients`.* FROM `patients` ORDER BY `patients`.`id` DESC LIMIT 1
+ => #<Patient id: 211, name: "rohan", age: 20, weight: 40, gender: "male", address: "21B street", phone_no: "9923531434", disease: "fever", created_at: "2017-07-17 12:31:36", updated_at: "2017-07-17 12:31:36", doctor_id: 105> 
+
+2.4.0 :016 > Patient.find_by name: 'atul'
+  Patient Load (0.8ms)  SELECT  `patients`.* FROM `patients` WHERE `patients`.`name` = 'atul' LIMIT 1
+ => #<Patient id: 205, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:28:38", updated_at: "2017-07-17 11:28:38", doctor_id: 104>
+
+2.4.0 :017 > Patient.find_by! name:'dfg'
+  Patient Load (0.7ms)  SELECT  `patients`.* FROM `patients` WHERE `patients`.`name` = 'dfg' LIMIT 1
+ActiveRecord::RecordNotFound: Couldn't find Patient
+	from (irb):17
+
+ Patient.where("doctor_id=?",102)
+  Patient Load (19.0ms)  SELECT  `patients`.* FROM `patients` WHERE (doctor_id=102) LIMIT 11
+ => #<ActiveRecord::Relation [#<Patient id: 202, name: "rani", age: 20, weight: 50, gender: "female", address: "15B street", phone_no: "9911431734", disease: "cholera", created_at: "2017-07-17 07:26:37", updated_at: "2017-07-17 07:26:37", doctor_id: 102>, #<Patient id: 208, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:37:34", updated_at: "2017-07-17 11:37:34", doctor_id: 102>, #<Patient id: 209, name: "paul", age: 20, weight: 40, gender: "male", address: "20B street", phone_no: "9917531434", disease: "fever", created_at: "2017-07-17 11:53:21", updated_at: "2017-07-17 11:53:21", doctor_id: 102>]> 
+
+2.4.0 :033 > Patient.where("doctor_id=? and disease=?",102,"cholera")
+  Patient Load (0.9ms)  SELECT  `patients`.* FROM `patients` WHERE (doctor_id=102 and disease='cholera') LIMIT 11
+ => #<ActiveRecord::Relation [#<Patient id: 202, name: "rani", age: 20, weight: 50, gender: "female", address: "15B street", phone_no: "9911431734", disease: "cholera", created_at: "2017-07-17 07:26:37", updated_at: "2017-07-17 07:26:37", doctor_id: 102>]> 
+
+2.4.0 :034 > Patient.where("name like ?",'a%')
+  Patient Load (0.8ms)  SELECT  `patients`.* FROM `patients` WHERE (name like 'a%') LIMIT 11
+ => #<ActiveRecord::Relation [#<Patient id: 200, name: "amit", age: 20, weight: 30, gender: "male", address: "13B street", phone_no: "9911431764", disease: "typhoid", created_at: "2017-07-17 07:24:08", updated_at: "2017-07-17 07:24:08", doctor_id: 101>, #<Patient id: 204, name: "aman", age: 60, weight: 90, gender: "male", address: "17B street", phone_no: "9913431434", disease: "fever", created_at: "2017-07-17 07:28:41", updated_at: "2017-07-17 07:28:41", doctor_id: 104>, #<Patient id: 205, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:28:38", updated_at: "2017-07-17 11:28:38", doctor_id: 104>, #<Patient id: 207, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:36:28", updated_at: "2017-07-17 11:36:28", doctor_id: 104>, #<Patient id: 208, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:37:34", updated_at: "2017-07-17 11:37:34", doctor_id: 102>, #<Patient id: 210, name: "agi", age: 20, weight: 40, gender: "male", address: "21B street", phone_no: "9923531434", disease: "fever", created_at: "2017-07-17 11:59:08", updated_at: "2017-07-17 11:59:08", doctor_id: 105>]>
+ 
+2.4.0 :035 > Lab.where("amount>=:initial and amount<:final",{initial:2000,final:5000}) 
+  Lab Load (0.5ms)  SELECT  `labs`.* FROM `labs` WHERE (amount>=2000 and amount<5000) LIMIT 11
+ => #<ActiveRecord::Relation [#<Lab id: 2, weight: 30, date: "2017-06-01", category: "B", amount: 2000, created_at: "2017-07-17 07:33:23", updated_at: "2017-07-17 07:33:23", patient_id: 201, doctor_id: 101>, #<Lab id: 3, weight: 40, date: "2016-06-01", category: "B", amount: 3000, created_at: "2017-07-17 07:33:43", updated_at: "2017-07-17 07:33:43", patient_id: 202, doctor_id: 102>, #<Lab id: 4, weight: 40, date: "2016-05-01", category: "C", amount: 4000, created_at: "2017-07-17 07:34:05", updated_at: "2017-07-17 07:34:05", patient_id: 203, doctor_id: 103>]> 
+
+2.4.0 :036 > patient=Patient.last
+  Patient Load (0.7ms)  SELECT  `patients`.* FROM `patients` ORDER BY `patients`.`id` DESC LIMIT 1
+ => #<Patient id: 211, name: "rohan", age: 20, weight: 40, gender: "male", address: "21B street", phone_no: "9923531434", disease: "fever", created_at: "2017-07-17 12:31:36", updated_at: "2017-07-17 12:31:36", doctor_id: 105> 
+
+patient.doctor
+  Doctor Load (0.5ms)  SELECT  `doctors`.* FROM `doctors` WHERE `doctors`.`id` = 105 LIMIT 1
+ => #<Doctor id: 105, doctor_name: "Dr farooq", dept: "medicine", created_at: "2017-07-17 11:45:54", updated_at: "2017-07-17 11:45:54"> 
+
+ patient.labs
+  Lab Load (0.7ms)  SELECT  `labs`.* FROM `labs` WHERE `labs`.`patient_id` = 211 LIMIT 11
+ => #<ActiveRecord::Associations::CollectionProxy []> 
+
+Lab.where(id:true)
+  Lab Load (0.7ms)  SELECT  `labs`.* FROM `labs` WHERE `labs`.`id` = 1 LIMIT 11
+ => #<ActiveRecord::Relation [#<Lab id: 1, weight: 30, date: "2017-06-02", category: "A", amount: 1000, created_at: "2017-07-17 07:32:38", updated_at: "2017-07-17 07:32:38", patient_id: 200, doctor_id: 101>]>
+ 
+2.4.0 :043 > Lab.where(amount:2000..5000)
+  Lab Load (0.7ms)  SELECT  `labs`.* FROM `labs` WHERE (`labs`.`amount` BETWEEN 2000 AND 5000) LIMIT 11
+ => #<ActiveRecord::Relation [#<Lab id: 2, weight: 30, date: "2017-06-01", category: "B", amount: 2000, created_at: "2017-07-17 07:33:23", updated_at: "2017-07-17 07:33:23", patient_id: 201, doctor_id: 101>, #<Lab id: 3, weight: 40, date: "2016-06-01", category: "B", amount: 3000, created_at: "2017-07-17 07:33:43", updated_at: "2017-07-17 07:33:43", patient_id: 202, doctor_id: 102>, #<Lab id: 4, weight: 40, date: "2016-05-01", category: "C", amount: 4000, created_at: "2017-07-17 07:34:05", updated_at: "2017-07-17 07:34:05", patient_id: 203, doctor_id: 103>, #<Lab id: 5, weight: 50, date: "2016-05-11", category: "C", amount: 5000, created_at: "2017-07-17 07:34:30", updated_at: "2017-07-17 07:34:30", patient_id: 204, doctor_id: 104>, #<Lab id: 6, weight: 50, date: "2018-12-03", category: "D", amount: 5000, created_at: "2017-07-17 07:53:31", updated_at: "2017-07-17 07:53:31", patient_id: 202, doctor_id: 104>, #<Lab id: 7, weight: 70, date: "2018-12-05", category: "D", amount: 5000, created_at: "2017-07-17 09:53:59", updated_at: "2017-07-17 09:53:59", patient_id: 204, doctor_id: 104>]> 
+
+2.4.0 :044 > Patient.where(id:[201,202,203])
+  Patient Load (0.8ms)  SELECT  `patients`.* FROM `patients` WHERE `patients`.`id` IN (201, 202, 203) LIMIT 11
+ => #<ActiveRecord::Relation [#<Patient id: 201, name: "rahul", age: 10, weight: 40, gender: "male", address: "14B street", phone_no: "9911431754", disease: "cholera", created_at: "2017-07-17 07:25:42", updated_at: "2017-07-17 07:25:42", doctor_id: 101>, #<Patient id: 202, name: "rani", age: 20, weight: 50, gender: "female", address: "15B street", phone_no: "9911431734", disease: "cholera", created_at: "2017-07-17 07:26:37", updated_at: "2017-07-17 07:26:37", doctor_id: 102>, #<Patient id: 203, name: "ravi", age: 30, weight: 70, gender: "male", address: "16B street", phone_no: "9911431434", disease: "jaundice", created_at: "2017-07-17 07:27:56", updated_at: "2017-07-17 07:27:56", doctor_id: 103>]> 
+
+2.4.0 :045 > Patient.order(created_at: :desc)
+  Patient Load (0.8ms)  SELECT  `patients`.* FROM `patients` ORDER BY `patients`.`created_at` DESC LIMIT 11
+ => #<ActiveRecord::Relation [#<Patient id: 211, name: "rohan", age: 20, weight: 40, gender: "male", address: "21B street", phone_no: "9923531434", disease: "fever", created_at: "2017-07-17 12:31:36", updated_at: "2017-07-17 12:31:36", doctor_id: 105>, #<Patient id: 210, name: "agi", age: 20, weight: 40, gender: "male", address: "21B street", phone_no: "9923531434", disease: "fever", created_at: "2017-07-17 11:59:08", updated_at: "2017-07-17 11:59:08", doctor_id: 105>, #<Patient id: 209, name: "paul", age: 20, weight: 40, gender: "male", address: "20B street", phone_no: "9917531434", disease: "fever", created_at: "2017-07-17 11:53:21", updated_at: "2017-07-17 11:53:21", doctor_id: 102>, #<Patient id: 208, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:37:34", updated_at: "2017-07-17 11:37:34", doctor_id: 102>, #<Patient id: 207, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:36:28", updated_at: "2017-07-17 11:36:28", doctor_id: 104>, #<Patient id: 205, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:28:38", updated_at: "2017-07-17 11:28:38", doctor_id: 104>, #<Patient id: 204, name: "aman", age: 60, weight: 90, gender: "male", address: "17B street", phone_no: "9913431434", disease: "fever", created_at: "2017-07-17 07:28:41", updated_at: "2017-07-17 07:28:41", doctor_id: 104>, #<Patient id: 203, name: "ravi", age: 30, weight: 70, gender: "male", address: "16B street", phone_no: "9911431434", disease: "jaundice", created_at: "2017-07-17 07:27:56", updated_at: "2017-07-17 07:27:56", doctor_id: 103>, #<Patient id: 202, name: "rani", age: 20, weight: 50, gender: "female", address: "15B street", phone_no: "9911431734", disease: "cholera", created_at: "2017-07-17 07:26:37", updated_at: "2017-07-17 07:26:37", doctor_id: 102>, #<Patient id: 201, name: "rahul", age: 10, weight: 40, gender: "male", address: "14B street", phone_no: "9911431754", disease: "cholera", created_at: "2017-07-17 07:25:42", updated_at: "2017-07-17 07:25:42", doctor_id: 101>, ...]> 
+
+2.4.0 :049 >   Patient.select("name,age").where("name=?","atul")
+  Patient Load (0.7ms)  SELECT  name,age FROM `patients` WHERE (name='atul') LIMIT 11
+ => #<ActiveRecord::Relation [#<Patient id: nil, name: "atul", age: 20>, #<Patient id: nil, name: "atul", age: 20>, #<Patient id: nil, name: "atul", age: 20>]> 
+
+2.4.0 :050 > Patient.select("name,age").where("name=?","atul").distinct
+  Patient Load (0.8ms)  SELECT  DISTINCT name,age FROM `patients` WHERE (name='atul') LIMIT 11
+ => #<ActiveRecord::Relation [#<Patient id: nil, name: "atul", age: 20>]> 
+
+2.4.0 :051 > Patient.limit(2).offset(4)
+  Patient Load (0.7ms)  SELECT  `patients`.* FROM `patients` LIMIT 2 OFFSET 4
+ => #<ActiveRecord::Relation [#<Patient id: 204, name: "aman", age: 60, weight: 90, gender: "male", address: "17B street", phone_no: "9913431434", disease: "fever", created_at: "2017-07-17 07:28:41", updated_at: "2017-07-17 07:28:41", doctor_id: 104>, #<Patient id: 205, name: "atul", age: 20, weight: 40, gender: "male", address: "18B street", phone_no: "9913531434", disease: "fever", created_at: "2017-07-17 11:28:38", updated_at: "2017-07-17 11:28:38", doctor_id: 104>]> 
+
+****  Lab.select("date(created_at),sum(amount)").group("date(created_at)").having("sum(amount)>?",100)
+
+Patient.where('id=?',200).limit(5).order('id asc').unscope(:order)
+  Patient Load (0.5ms)  SELECT  `patients`.* FROM `patients` WHERE (id=200) LIMIT 5
+ => #<ActiveRecord::Relation [#<Patient id: 200, name: "amit", age: 20, weight: 30, gender: "male", address: "13B street", phone_no: "9911431764", disease: "typhoid", created_at: "2017-07-17 07:24:08", updated_at: "2017-07-17 07:24:08", doctor_id: 101>]> 
+
+Patient.where('id=?',200).limit(5).order('id asc').only(:order,:where)
+  Patient Load (0.7ms)  SELECT  `patients`.* FROM `patients` WHERE (id=200) ORDER BY id asc LIMIT 11
+ => #<ActiveRecord::Relation [#<Patient id: 200, name: "amit", age: 20, weight: 30, gender: "male", address: "13B street", phone_no: "9911431764", disease: "typhoid", created_at: "2017-07-17 07:24:08", updated_at: "2017-07-17 07:24:08", doctor_id: 101>]> 
+
+Lab.where("amount>1000").order(:category).reverse_order
+  Lab Load (0.9ms)  SELECT  `labs`.* FROM `labs` WHERE (amount>1000) ORDER BY `labs`.`category` DESC LIMIT 11
+ => #<ActiveRecord::Relation [#<Lab id: 9, weight: 22, date: "2013-05-02", category: "S", amount: 1002, created_at: "2017-07-17 11:53:43", updated_at: "2017-07-17 11:53:43", patient_id: 201, doctor_id: 103>, #<Lab id: 10, weight: 22, date: "2013-05-02", category: "S", amount: 1002, created_at: "2017-07-17 11:59:25", updated_at: "2017-07-17 11:59:25", patient_id: 201, doctor_id: 103>, #<Lab id: 11, weight: 22, date: "2013-05-06", category: "S", amount: 1002, created_at: "2017-07-17 12:28:38", updated_at: "2017-07-17 12:28:38", patient_id: 203, doctor_id: 100>, #<Lab id: 6, weight: 50, date: "2018-12-03", category: "D", amount: 5000, created_at: "2017-07-17 07:53:31", updated_at: "2017-07-17 07:53:31", patient_id: 202, doctor_id: 104>, #<Lab id: 7, weight: 70, date: "2018-12-05", category: "D", amount: 5000, created_at: "2017-07-17 09:53:59", updated_at: "2017-07-17 09:53:59", patient_id: 204, doctor_id: 104>, #<Lab id: 4, weight: 40, date: "2016-05-01", category: "C", amount: 4000, created_at: "2017-07-17 07:34:05", updated_at: "2017-07-17 07:34:05", patient_id: 203, doctor_id: 103>, #<Lab id: 5, weight: 50, date: "2016-05-11", category: "C", amount: 5000, created_at: "2017-07-17 07:34:30", updated_at: "2017-07-17 07:34:30", patient_id: 204, doctor_id: 104>, #<Lab id: 2, weight: 30, date: "2017-06-01", category: "B", amount: 2000, created_at: "2017-07-17 07:33:23", updated_at: "2017-07-17 07:33:23", patient_id: 201, doctor_id: 101>, #<Lab id: 3, weight: 40, date: "2016-06-01", category: "B", amount: 3000, created_at: "2017-07-17 07:33:43", updated_at: "2017-07-17 07:33:43", patient_id: 202, doctor_id: 102>]> 
+
+Doctor.joins("inner join departments on departments.id=doctors.department_id")
+   (80.6ms)  SET NAMES utf8,  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483
+  Doctor Load (206.3ms)  SELECT  `doctors`.* FROM `doctors` inner join departments on departments.id=doctors.department_id LIMIT 11
+ => #<ActiveRecord::Relation [#<Doctor id: 100, name: "Dr Raj", created_at: "2017-07-17 07:19:33", updated_at: "2017-07-18 12:21:26", department_id: 400>, #<Doctor id: 101, name: "Dr amit", created_at: "2017-07-17 07:21:11", updated_at: "2017-07-18 12:59:37", department_id: 402>, #<Doctor id: 102, name: "Dr rahul", created_at: "2017-07-17 07:21:59", updated_at: "2017-07-18 13:00:12", department_id: 403>, #<Doctor id: 103, name: "Dr rani", created_at: "2017-07-17 07:22:25", updated_at: "2017-07-18 13:00:29", department_id: 404>, #<Doctor id: 104, name: "Dr jeykl", created_at: "2017-07-17 07:23:10", updated_at: "2017-07-18 13:01:08", department_id: 405>, #<Doctor id: 105, name: "Dr farooq", created_at: "2017-07-17 11:45:54", updated_at: "2017-07-18 13:03:00", department_id: 406>, #<Doctor id: 106, name: "Dr gobar", created_at: "2017-07-17 12:00:01", updated_at: "2017-07-18 13:03:20", department_id: 407>, #<Doctor id: 107, name: "Dr paul", created_at: "2017-07-18 12:32:39", updated_at: "2017-07-18 12:32:39", department_id: 401>]> 
+2.4.0 :004 > Doctor.joins(:departments)
+ActiveRecord::ConfigurationError: Can't join 'Doctor' to association named 'departments'; perhaps you misspelled it?
+
+2.4.0 :005 > Department.joins(:doctors)
+  Department Load (11.8ms)  SELECT  `departments`.* FROM `departments` INNER JOIN `doctors` ON `doctors`.`department_id` = `departments`.`id` LIMIT 11
+ => #<ActiveRecord::Relation [#<Department id: 400, name: "medicine", created_at: "2017-07-18 09:33:29", updated_at: "2017-07-18 09:33:29">, #<Department id: 401, name: "neurosurgon", created_at: "2017-07-18 09:33:47", updated_at: "2017-07-18 09:33:47">, #<Department id: 402, name: "opthamologist", created_at: "2017-07-18 09:34:10", updated_at: "2017-07-18 09:34:10">, #<Department id: 403, name: "paediatrician", created_at: "2017-07-18 09:34:28", updated_at: "2017-07-18 09:34:28">, #<Department id: 404, name: "orthopadic", created_at: "2017-07-18 09:35:11", updated_at: "2017-07-18 09:35:11">, #<Department id: 405, name: "gynacologist", created_at: "2017-07-18 12:34:02", updated_at: "2017-07-18 12:34:02">, #<Department id: 406, name: "nephrologist", created_at: "2017-07-18 13:02:20", updated_at: "2017-07-18 13:02:20">, #<Department id: 407, name: "neurologist", created_at: "2017-07-18 13:02:44", updated_at: "2017-07-18 13:02:44">]>
+ 
+
+
+
+
+2.4.0 :008 > Doctor.joins(:appointments)
+  Doctor Load (81.3ms)  SELECT  `doctors`.* FROM `doctors` INNER JOIN `appointments` ON `appointments`.`doctor_id` = `doctors`.`id` LIMIT 11
+ => #<ActiveRecord::Relation [#<Doctor id: 100, name: "Dr Raj", created_at: "2017-07-17 07:19:33", updated_at: "2017-07-18 12:21:26", department_id: 400>, #<Doctor id: 101, name: "Dr amit", created_at: "2017-07-17 07:21:11", updated_at: "2017-07-18 12:59:37", department_id: 402>, #<Doctor id: 106, name: "Dr gobar", created_at: "2017-07-17 12:00:01", updated_at: "2017-07-18 13:03:20", department_id: 407>]> 
+
+2.4.0 :009 > Appointment.joins(:doctors,:patients)
+ActiveRecord::ConfigurationError: Can't join 'Appointment' to association named 'doctors'; perhaps you misspelled it?
+
+2.4.0 :010 > Doctor.joins(:department)
+  Doctor Load (1.1ms)  SELECT  `doctors`.* FROM `doctors` INNER JOIN `departments` ON `departments`.`doctor_id` = `doctors`.`id` LIMIT 11
+ActiveRecord::StatementInvalid: Mysql2::Error: Unknown column 'departments.doctor_id' in 'on clause': SELECT  `doctors`.* FROM `doctors` INNER JOIN `departments` ON `departments`.`doctor_id` = `doctors`.`id` LIMIT 11
+
+2.4.0 :011 > Appointment.joins(:doctor,:patient)
+  Appointment Load (0.8ms)  SELECT  `appointments`.* FROM `appointments` INNER JOIN `doctors` ON `doctors`.`id` = `appointments`.`doctor_id` INNER JOIN `patients` ON `patients`.`id` = `appointments`.`patient_id` LIMIT 11
+ => #<ActiveRecord::Relation [#<Appointment id: 500, time: "2017-05-02 12:15:12", doctor_id: 100, patient_id: 200, created_at: "2017-07-18 12:16:23", updated_at: "2017-07-18 12:16:23">, #<Appointment id: 501, time: "2017-06-02 13:15:15", doctor_id: 106, patient_id: 211, created_at: "2017-07-18 12:17:49", updated_at: "2017-07-18 12:17:49">, #<Appointment id: 502, time: "2018-06-02 17:15:14", doctor_id: 101, patient_id: 201, created_at: "2017-07-18 12:18:18", updated_at: "2017-07-18 12:18:18">]> 
+
+2.4.0 :012 > Appointment.joins(:doctor)
+  Appointment Load (0.8ms)  SELECT  `appointments`.* FROM `appointments` INNER JOIN `doctors` ON `doctors`.`id` = `appointments`.`doctor_id` LIMIT 11
+ => #<ActiveRecord::Relation [#<Appointment id: 500, time: "2017-05-02 12:15:12", doctor_id: 100, patient_id: 200, created_at: "2017-07-18 12:16:23", updated_at: "2017-07-18 12:16:23">, #<Appointment id: 501, time: "2017-06-02 13:15:15", doctor_id: 106, patient_id: 211, created_at: "2017-07-18 12:17:49", updated_at: "2017-07-18 12:17:49">, #<Appointment id: 502, time: "2018-06-02 17:15:14", doctor_id: 101, patient_id: 201, created_at: "2017-07-18 12:18:18", updated_at: "2017-07-18 12:18:18">]> 
+
+2.4.0 :013 > Doctor.joins(:department)
+  Doctor Load (1.0ms)  SELECT  `doctors`.* FROM `doctors` INNER JOIN `departments` ON `departments`.`doctor_id` = `doctors`.`id` LIMIT 11
+ActiveRecord::StatementInvalid: Mysql2::Error: Unknown column 'departments.doctor_id' in 'on clause': SELECT  `doctors`.* FROM `doctors` INNER JOIN `departments` ON `departments`.`doctor_id` = `doctors`.`id` LIMIT 11
+
+
+
+2.4.0 :015 > Appointment.group(:patient_id).count
+   (97.3ms)  SELECT COUNT(*) AS count_all, `appointments`.`patient_id` AS appointments_patient_id FROM `appointments` GROUP BY `appointments`.`patient_id`
+ => {200=>1, 201=>1, 211=>1} 
+
+Patient.select('name').joins(:doctors,:appointments).where("appointments.doctor_id=?",106)
+  Patient Load (1.0ms)  SELECT  `patients`.`name` FROM `patients` INNER JOIN `doctors_patients` ON `doctors_patients`.`patient_id` = `patients`.`id` INNER JOIN `doctors` ON `doctors`.`id` = `doctors_patients`.`doctor_id` INNER JOIN `appointments` ON `appointments`.`patient_id` = `patients`.`id` WHERE (appointments.doctor_id=106) LIMIT 11
+ => #<ActiveRecord::Relation [#<Patient id: nil, name: "rohan">]> 
+
+ 2.4.0 :033 > Patient.select('name').joins(:doctors,:appointments).where("doctors.department_id=?", Department.select('id').find_by(name:'neurologist'))
+  Department Load (0.7ms)  SELECT  `departments`.`id` FROM `departments` WHERE `departments`.`name` = 'neurologist' LIMIT 1
+  Patient Load (18.3ms)  SELECT  `patients`.`name` FROM `patients` INNER JOIN `doctors_patients` ON `doctors_patients`.`patient_id` = `patients`.`id` INNER JOIN `doctors` ON `doctors`.`id` = `doctors_patients`.`doctor_id` INNER JOIN `appointments` ON `appointments`.`patient_id` = `patients`.`id` WHERE (doctors.department_id=407) LIMIT 11
+ => #<ActiveRecord::Relation [#<Patient id: nil, name: "rohan">]> 
+

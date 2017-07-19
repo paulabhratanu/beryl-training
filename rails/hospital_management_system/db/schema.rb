@@ -10,26 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170717105623) do
+ActiveRecord::Schema.define(version: 20170718121232) do
 
-  create_table "doctors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "doctor_name"
-    t.string "dept"
+  create_table "appointments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.datetime "time"
+    t.bigint "doctor_id"
+    t.bigint "patient_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctor_id"], name: "index_appointments_on_doctor_id"
+    t.index ["patient_id"], name: "index_appointments_on_patient_id"
+  end
+
+  create_table "departments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "labs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "weight"
-    t.date "date"
-    t.string "category"
-    t.integer "amount"
+  create_table "doctors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "patient_id"
-    t.bigint "doctor_id"
-    t.index ["doctor_id"], name: "index_labs_on_doctor_id"
-    t.index ["patient_id"], name: "index_labs_on_patient_id"
+    t.bigint "department_id"
+    t.index ["department_id"], name: "index_doctors_on_department_id"
+  end
+
+  create_table "doctors_patients", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "patient_id", null: false
+    t.bigint "doctor_id", null: false
+    t.index ["doctor_id"], name: "index_doctors_patients_on_doctor_id"
+    t.index ["patient_id"], name: "index_doctors_patients_on_patient_id"
   end
 
   create_table "patients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -42,11 +53,11 @@ ActiveRecord::Schema.define(version: 20170717105623) do
     t.string "disease"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "doctor_id"
-    t.index ["doctor_id"], name: "index_patients_on_doctor_id"
+    t.integer "height"
+    t.index ["height"], name: "index_patients_on_height"
   end
 
-  add_foreign_key "labs", "doctors"
-  add_foreign_key "labs", "patients"
-  add_foreign_key "patients", "doctors"
+  add_foreign_key "appointments", "doctors"
+  add_foreign_key "appointments", "patients"
+  add_foreign_key "doctors", "departments"
 end

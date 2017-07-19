@@ -110,6 +110,39 @@ user.update(name: 'Dave')
 -joins
 Item.joins("inner join customers on customers.id=items.customer_id")
 
+-Joining Nested Associations (Multiple Level)
+Category.joins(articles: [{ comments: :guest }, :tags])
+
+-left_outer_joins
+If you want to select a set of records whether or not they have associated records you can use the left_outer_joins method.
+Author.left_outer_joins(:posts).distinct.select('authors.*, COUNT(posts.*) AS posts_count').group('authors.id')
+
+-subqueries
+Message.where(user_id: Profile.select("user_id").where(gender: 'm'))
+
+-find_by_create_by
+Client.find_or_create_by(first_name: 'Andy')
+# => #<Client id: 1, first_name: "Andy", orders_count: 0, locked: true, created_at: "2011-08-30 06:09:27", updated_at: "2011-08-30 06:09:27">
+
+-The find_or_initialize_by method
+ will work just like find_or_create_by but it will call new instead of create. This means that a new model instance will be created in memory but won't be saved to the database. Continuing with the find_or_create_by example, we now want the client named 'Nick':
+nick = Client.find_or_initialize_by(first_name: 'Nick')
+# => #<Client id: nil, first_name: "Nick", orders_count: 0, locked: true, created_at: "2011-08-30 06:09:27", updated_at: "2011-08-30 06:09:27">
+
+-select_all 
+will retrieve objects from the database using custom SQL just like find_by_sql but will not instantiate them. Instead, you will get an array of hashes where each hash indicates a record.
+Client.connection.select_all("SELECT first_name, created_at FROM clients WHERE id = '1'")
+# => [
+#   {"first_name"=>"Rafael", "created_at"=>"2012-11-10 23:23:45.281189"},
+#   {"first_name"=>"Eileen", "created_at"=>"2013-12-09 11:22:35.221282"}
+# ] 
+
+nick.persisted?
+# => false
+ 
+nick.new_record?
+# => true
+
 **scope
 **enums
 
@@ -126,8 +159,9 @@ from customers as c
 inner join items as i
 on c.id=i.id")
 
--pluck
-Client.pluck(:id, :name)
+Client.distinct.pluck(:role)
+# SELECT DISTINCT role FROM clients
+# => ['admin', 'member', 'guest'
 
 Client.where(first_name: 'Ryan').count
 # SELECT count(*) AS count_all FROM clients WHERE (first_name = 'Ryan')
@@ -135,6 +169,9 @@ Client.where(first_name: 'Ryan').count
 Client.average("orders_count")
 Client.sum("orders_count")
 Client.maximum("orders_count")
+
+-explain
+User.where(id: 1).joins(:articles).explain
 
 #validations
 class Person < ApplicationRecord
