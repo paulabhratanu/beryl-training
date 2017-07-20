@@ -1,0 +1,47 @@
+REST="representational state transfer"
+resource-based(noun based)
+representations(not a resource;representation of a resource)
+Six constraints:
+ ->uniform interface
+ ->stateless
+ ->client-server
+ ->cacheable
+ ->layered system
+ ->code on demand
+
+----Representations----
+->How resources get manipulated
+->resource state transferred between client and server
+->JSON or XML
+eg:
+   *Resource: person(amit)
+   *Service: contact information(GET)
+   *representation:
+     ->name,address,phone no
+     ->JSON or XML
+
+----Uniform Interface----
+->interface between client and server
+->simplifies the architecture
+->HTTP verbs(GET,PUT,POST,DELETE)
+->URIs(resource name)
+->HTTP response(status,body)
+
+----Stateless----
+->Server contains no client state
+->Each request contains enough context to process the message
+->Any session state is held on the client
+
+----Client-Server----
+->Assume a disconnected system
+->uniorm interface is the link between the two
+
+----Cacheable----
+->server responses are cacheable
+
+----Layered system----
+->client can't assume direct connection to server
+->improves scalability
+
+----Code on demand----
+->javascript

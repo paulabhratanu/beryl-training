@@ -311,4 +311,9 @@ Patient.select('name').joins(:doctors,:appointments).where("appointments.doctor_
   Patient Load (0.4ms)  SELECT  `patients`.* FROM `patients` WHERE `patients`.`id` = 200 LIMIT 1
  => "amit"
 
+2.4.0 :001 > Appointment.joins(:doctor).group(:name).where(time:'2014-12-23 14:23:13'..Time.zone.now.beginning_of_day).count
+   (0.5ms)  SET NAMES utf8,  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483
+   (1.0ms)  SELECT COUNT(*) AS count_all, `name` AS name FROM `appointments` INNER JOIN `doctors` ON `doctors`.`id` = `appointments`.`doctor_id` WHERE (`appointments`.`time` BETWEEN '2014-12-23 14:23:13' AND '2017-07-20 00:00:00') GROUP BY `name`
+ => {"Dr farooq"=>1, "Dr gobar"=>1, "Dr rahul"=>1, "Dr Raj"=>1, "Dr raju"=>2, "Dr rani"=>1} 
+
 

@@ -1,0 +1,8 @@
+----Process views----
+Interaction relationships among components by revealing the path of data as it flows through the system.
+
+----Connector views----
+A connector view of an architecture concentrates on the mechanics of the communication between components.
+
+----Data views----
+A data view of an architecture reveals the application state as information flows through the components.

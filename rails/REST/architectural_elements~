@@ -1,0 +1,28 @@
+----Data elements----
+
+resource ->	the intended conceptual target of a hypertext reference
+resource identifier ->	URL, URN
+representation ->	HTML document, JPEG image
+representation metadata ->	media type, last-modified time
+resource metadata ->	source link, alternates, vary
+control data ->	if-modified-since, cache-control
+
+----Connectors----
+
+a connector manages network communication for a component, information can be shared across multiple interactions in order to improve efficiency and responsiveness.
+
+Connector 	Modern Web Examples
+
+client ->	libwww, libwww-perl
+server ->	libwww, Apache API, NSAPI
+cache ->	browser cache, Akamai cache network
+resolver(A resolver translates partial or complete resource identifiers into the network address information needed to establish an inter-component connection) ->	bind (DNS lookup library)
+tunnel(simply relays communication across a connection boundary, such as a firewall or lower-level network gateway) ->	SOCKS, SSL after HTTP CONNECT
+
+----Components----
+
+
+origin server ->	Apache httpd, Microsoft IIS
+gateway  -> 	Squid, CGI, Reverse Proxy
+proxy ->	CERN Proxy, Netscape Proxy, Gauntlet
+user agent -> 	Netscape Navigator, Lynx, MOMspider

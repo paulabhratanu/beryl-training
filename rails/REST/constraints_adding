@@ -1,0 +1,5 @@
+Null->client-server->stateless->cache->uniform interface->layered
+    
+----stateless----
+
+*such that each request from client to server must contain all of the information necessary to understand the request, and cannot take advantage of any stored context on the server. Session state is therefore kept entirely on the client.
