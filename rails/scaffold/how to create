@@ -8,6 +8,9 @@ rails g scaffold Recipe tittle:string instructions:text
 rake db:migrate RAILS_ENV=development
 rails server
 
+rails destroy scaffold MyFoo [destroy a scaffold]
+rake db:rollback
+
 ----Controller----
 It consists of index,show,new,create,update,destroy methods 
 
@@ -27,3 +30,5 @@ edit_recipe GET    /recipes/:id/edit(.:format) recipes#edit
   
 *JSON as Default
 
+#help
+rails generate scaffold Person name:string honest:boolean ->create a checkbox

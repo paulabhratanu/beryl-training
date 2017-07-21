@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-months = Hash.new( "month" )
+H = Hash["a" => 100, "b" => 200]
 
-puts "#{months[0]}"
-puts "#{months[72]}"
+puts "#{H['a']}"
+puts "#{H['b']}""

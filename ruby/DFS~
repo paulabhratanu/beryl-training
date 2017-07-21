@@ -1,0 +1,13 @@
+n-number of nodes
+for(i=0;i<n;i++)
+   visited[i]=0;
+
+void DFS(int i)
+{
+   visited[i]=1;
+
+ for each w adjacent to i
+   if(!visited[i])
+     DFS(i)
+  
+}

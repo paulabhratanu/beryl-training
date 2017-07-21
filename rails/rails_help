@@ -39,6 +39,21 @@ customer.age=10
 #migrate
 rails db:migrate 
 
+-migrations up and down
+class ChangeProductsPrice < ActiveRecord::Migration[5.0]
+  def up
+    change_table :products do |t|
+      t.change :price, :string
+    end
+  end
+ 
+  def down
+    change_table :products do |t|
+      t.change :price, :integer
+    end
+  end
+end
+
 -Addcolumn
 $ bin/rails generate migration AddDetailsToProducts part_number:string price:decimal
 
@@ -440,3 +455,37 @@ class CreateAssembliesPartsJoinTable < ActiveRecord::Migration[5.0]
   end
 end
 
+#associations
+-Bi-directional Associations
+
+It's normal for associations to work in two directions, requiring declaration on two different models:
+class Author < ApplicationRecord
+  has_many :books
+end
+ 
+class Book < ApplicationRecord
+  belongs_to :author
+end
+
+-Polymorphic Associations
+
+A slightly more advanced twist on associations is the polymorphic association. With polymorphic associations, a model can belong to more than one other model, on a single association. For example, you might have a picture model that belongs to either an employee model or a product model. Here's how this could be declared:
+class Picture < ApplicationRecord
+  belongs_to :imageable, polymorphic: true
+end
+ 
+class Employee < ApplicationRecord
+  has_many :pictures, as: :imageable
+end
+ 
+class Product < ApplicationRecord
+  has_many :pictures, as: :imageable
+end
+
+-self joins
+class Employee < ApplicationRecord
+  has_many :subordinates, class_name: "Employee",
+                          foreign_key: "manager_id"
+ 
+  belongs_to :manager, class_name: "Employee"
+end

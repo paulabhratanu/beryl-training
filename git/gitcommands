@@ -10,7 +10,7 @@ git add -A  ->add everything into the staging area
 git reset   ->remove everything from the staging area
 git commit -m "initial commit"
 git log ->details about the commit
-git <clone> <where to clone> ->cloning a repo
+git <clone> <where to clone> ->cloning a repo OR git clone [url]
 git diff ->changes in the repo
 git remote add origin https://github.com/paulabhratanu/df.git
 git push -u origin
