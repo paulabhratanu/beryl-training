@@ -32,3 +32,4 @@ edit_recipe GET    /recipes/:id/edit(.:format) recipes#edit
 
 #help
 rails generate scaffold Person name:string honest:boolean ->create a checkbox
+rails g scaffold_controller User ->run scaffold for already generated model[User]

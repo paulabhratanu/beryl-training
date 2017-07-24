@@ -1,0 +1,150 @@
+-Defining multiple resources at the same time
+
+resources :photos, :books, :videos
+
+get 'profile', to: 'users#show'
+             
+             OR
+
+get 'profile', to: :show, controller: 'users'
+
+-Controller Namespaces and Routing
+
+*You may wish to organize groups of controllers under a namespace. Most commonly, you might group a number of administrative controllers under an Admin:: namespace. You would place these controllers under the app/controllers/admin directory, and you can group them together in your router:
+
+namespace :admin do
+  resources :articles, :comments
+end
+
+*If you want to route /articles (without the prefix /admin) to Admin::ArticlesController, you could use:
+scope module: 'admin' do
+  resources :articles, :comments
+end
+
+or, for a single case:
+resources :articles, module: 'admin'
+
+-Nested Resources
+
+*It's common to have resources that are logically children of other resources. For example, suppose your application includes these models:
+class Magazine < ApplicationRecord
+  has_many :ads
+end
+ 
+class Ad < ApplicationRecord
+  belongs_to :magazine
+end
+
+*Nested routes allow you to capture this relationship in your routing. In this case, you could include this route declaration:
+resources :magazines do
+  resources :ads
+end
+
+-shallow nesting
+*To avoid deep nesting
+
+resources :articles, shallow: true do
+  resources :comments
+  resources :quotes
+  resources :drafts
+end
+
+-Routing concerns
+
+*Routing concerns allow you to declare common routes that can be reused inside other resources and routes. To define a concern:
+
+concern :commentable do
+  resources :comments
+end
+ 
+concern :image_attachable do
+  resources :images, only: :index
+end
+
+*These concerns can be used in resources to avoid code duplication and share behavior across routes:
+resources :messages, concerns: :commentable
+ 
+resources :articles, concerns: [:commentable, :image_attachable]
+
+-Creating Paths and URLs From Objects
+
+resources :magazines do
+  resources :ads
+end
+
+<%= link_to 'Ad details', magazine_ad_path(@magazine, @ad) %>
+<%= link_to 'Ad details', url_for([@magazine, @ad]) %>
+
+-Adding more RESTful options
+
+*Adding a member block
+resources :photos do
+  get 'preview', on: :member
+end
+
+*Adding a collection block
+resources :photos do
+  get 'search', on: :collection
+end
+
+*Adding Routes for Additional New Actions
+
+To add an alternate new action using the :on shortcut:
+resources :comments do
+  get 'preview', on: :new
+end
+
+-Non-resourceful routes
+
+*Bound parameters
+get 'photos(/:id)', to: :display
+
+-Dynamic Segments
+
+*You can set up as many dynamic segments within a regular route as you like. Any segment will be available to the action as part of params. If you set up this route:
+get 'photos/:id/:user_id', to: 'photos#show'
+
+-Static Segments
+
+You can specify static segments when creating a route by not prepending a colon to a fragment:
+get 'photos/:id/with_user/:user_id', to: 'photos#show'
+
+This route would respond to paths such as /photos/1/with_user/2. In this case, params would be { controller: 'photos', action: 'show', id: '1', user_id: '2' }
+
+-The Query String
+
+The params will also include any parameters from the query string. For example, with this route:
+get 'photos/:id', to: 'photos#show'
+
+An incoming path of /photos/1?user_id=2 will be dispatched to the show action of the Photos controller. params will be { controller: 'photos', action: 'show', id: '1', user_id: '2' }.
+
+- Naming Routes
+
+You can specify a name for any route using the :as option:
+get 'exit', to: 'sessions#destroy', as: :logout
+
+This will create logout_path and logout_url as named helpers in your application. Calling logout_path will return /exit
+
+*You can also use this to override routing methods defined by resources, like this:
+get ':username', to: 'users#show', as: :user
+
+*You can use the match method with the :via option to match multiple verbs at once:
+match 'photos', to: 'photos#show', via: [:get, :post]
+
+*You can match all verbs to a particular route using via: :all:
+match 'photos', to: 'photos#show', via: :all
+
+*You can use the :constraints option to enforce a format for a dynamic segment:
+get 'photos/:id', to: 'photos#show', constraints: { id: /[A-Z]\d{5}/ }
+
+-Request based constraints
+
+*You specify a request-based constraint the same way that you specify a segment constraint:
+get 'photos', to: 'photos#index', constraints: { subdomain: 'admin' }
+
+*You can also specify constraints in a block form:
+namespace :admin do
+  constraints subdomain: 'admin' do
+    resources :photos
+  end
+end

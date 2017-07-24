@@ -30,3 +30,5 @@ edit_recipe GET    /recipes/:id/edit(.:format) recipes#edit
   
 *JSON as Default
 
+#help
+rails generate scaffold Person name:string honest:boolean ->create a checkbox

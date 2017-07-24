@@ -21,11 +21,32 @@ class EmployeesController < ApplicationController
   def edit
   end
 
+  def check_status
+        @employee = Employee.find(params[:id])
+        if params[:active] == "active"
+          @employee.update_attributes(active: 1)
+
+        else
+          @employee.update_attributes(active: 0) 
+        end
+
+        @employee.update(remark: params[:remarks])
+
+  redirect_to employees_path
+
+  end
+
+  def salary_update
+    @employee = Employee.find(params[:id])
+    salary=@employee.salary+params[:salary].to_i
+    @employee.update(salary: salary)
+
+  end
   # POST /employees
   # POST /employees.json
   def create
     @employee = Employee.new(employee_params)
-
+    
     respond_to do |format|
       if @employee.save
         format.html { redirect_to @employee, notice: 'Employee was successfully created.' }

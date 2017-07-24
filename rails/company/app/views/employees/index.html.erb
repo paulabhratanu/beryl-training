@@ -1,5 +1,11 @@
 <p id="notice"><%= notice %></p>
-
+    <script type="text/javascript">  
+        $(function(){
+         $('.active').on('change',function(){
+            alert("hello");
+            });
+        });
+    </script>
 <h1>Employees</h1>
 
 <table>
@@ -9,6 +15,7 @@
       <th>Salary</th>
       <th>Gender</th>
       <th>Honest</th>
+      <th>Active</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -22,12 +29,36 @@
         <td><%= employee.honest %></td>
         <td><%= link_to 'Show', employee %></td>
         <td><%= link_to 'Edit', edit_employee_path(employee) %></td>
-        <td><%= link_to 'Destroy', employee, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', employee, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <td><%= link_to 'Check', check_status_employee_path(employee),method: :patch %></td>
+        <td>
+          <form action ="/employees/<%= employee.id %>/check_status" method="post">
+          <input name="_method" value="patch" type="hidden">
+            <% if employee.active == true %>
+              <input type="checkbox" name="active" value="active" checked="true" >Active
+                  
+            <% else %>
+              <input type="checkbox" name="active" value="active">Inactive
+            <% end %>
+            <input type="text" name="remarks" value="remarks">
+            <input type="submit" value="Submit">
+         
+        </td>
+         <td>
+          </form>
+          <form action ="/employees/<%= employee.id %>/salary_update" method="post">
+          <input name="_method" value="patch" type="hidden">
+          <input type="text" name="salary" value="salary">
+          <input type="submit" value="update">
+          </form>
+          </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
+
+
 
 <%= link_to 'New Employee', new_employee_path %>
