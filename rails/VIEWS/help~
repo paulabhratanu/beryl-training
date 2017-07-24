@@ -1,0 +1,350 @@
+-Creating responses
+
+
+    *Call render to create a full response to send back to the browser
+    *Call redirect_to to send an HTTP redirect status code to the browser
+    *Call head to create a response consisting solely of HTTP headers to send back to the browser
+
+-Using render
+
+->Rendering an Action's View
+  
+  def update
+  @book = Book.find(params[:id])
+  if @book.update(book_params)
+    redirect_to(@book)
+  else
+    render :edit
+  end
+end
+
+->Rendering an Action's Template from Another Controller
+
+ *render "products/show"
+
+->Rendering an Arbitrary File
+
+ *render file: "/u/apps/warehouse_app/current/app/views/products/show"
+
+->Using render with :inline
+
+ *render inline: "<% products.each do |p| %><p><%= p.name %></p><% end %>"
+
+ By default inline rendering use erb but we can force it to use the builder
+ *render inline: "xml.p {'Horrid coding practice!'}", type: :builder
+
+->Rendering Text
+
+You can send plain text - with no markup at all - back to the browser by using the :plain option to render:
+ *render plain: "OK"
+
+-Rendering HTML
+
+ *render html: "<strong>Not Found</strong>".html_safe
+
+-Rendering JSON
+
+JSON is a JavaScript data format used by many Ajax libraries. Rails has built-in support for converting objects to JSON and rendering that JSON back to the browser:
+render json: @product
+
+-Rendering XML
+
+*render xml: @product
+
+-Options for render
+
+Calls to the render method generally accept five options:
+
+    :content_type
+    :layout
+    :location
+    :status
+    :formats
+
+:content_type
+
+ *render file: filename, content_type: "application/rss"
+
+:layout
+
+You can use the :layout option to tell Rails to use a specific file as the layout for the current action:
+ *render layout: "special_layout"
+ *render layout: false
+
+:location
+
+You can use the :location option to set the HTTP Location header:
+*render xml: photo, location: photo_url(photo)
+
+:status
+
+Rails will automatically generate a response with the correct HTTP status code (in most cases, this is 200 OK). You can use the :status option to change this:
+*render status: 500
+*render status: :forbidden
+
+:format
+
+*render formats: :xml
+*render formats: [:json, :xml]
+
+-finding layouts
+
+*Rails also provides several ways to more precisely assign specific layouts to individual controllers and actions.
+
+class ProductsController < ApplicationController
+  layout "inventory"
+  #...
+end
+
+*To assign a specific layout for the entire application, use a layout declaration in your ApplicationController class:
+
+class ApplicationController < ActionController::Base
+  layout "main"
+  #...
+
+->Choosing Layouts at Runtime
+
+*You can use a symbol to defer the choice of layout until a request is processed:
+class ProductsController < ApplicationController
+  layout :products_layout
+ 
+  def show
+    @product = Product.find(params[:id])
+  end
+ 
+  private
+    def products_layout
+      @current_user.special? ? "special" : "products"
+    end
+ 
+end
+
+-Conditional Layouts
+
+*Layouts specified at the controller level support the :only and :except options. These options take either a method name, or an array of method names, corresponding to method names within the controller:
+
+class ProductsController < ApplicationController
+  layout "product", except: [:index, :rss]
+end
+
+-Avoiding Double Render Errors
+
+def show
+  @book = Book.find(params[:id])
+  if @book.special?
+    render action: "special_show" and return
+  end
+  render action: "regular_show"
+end
+
+-Using redirect_to
+
+*For example, you could redirect from wherever you are in your code to the index of photos in your application with this call:
+
+redirect_to photos_url
+
+*You can use redirect_back to return the user to the page they just came from
+
+redirect_back(fallback_location: root_path)
+
+->Getting a Different Redirect Status Code
+
+  *redirect_to photos_path, status: 301
+
+-Difference Between render and redirect_to
+
+def index
+  @books = Book.all
+end
+ 
+def show
+  @book = Book.find_by(id: params[:id])
+  if @book.nil?
+    redirect_to action: :index
+  end
+end
+
+def index
+  @books = Book.all
+end
+ 
+
+*This would detect that there are no books with the specified ID, populate the @books instance variable with all the books in the model, and then directly render the index.html.erb template, returning it to the browser with a flash alert message to tell the user what happened.
+def show
+  @book = Book.find_by(id: params[:id])
+  if @book.nil?
+    @books = Book.all
+    flash.now[:alert] = "Your book was not found"
+    render "index"
+  end
+end
+
+end
+
+-Using head To Build Header-Only Responses
+
+*head :bad_request
+
+HTTP/1.1 400 Bad Request
+Connection: close
+Date: Sun, 24 Jan 2010 12:15:53 GMT
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=utf-8
+X-Runtime: 0.013483
+Set-Cookie: _blog_session=...snip...; path=/; HttpOnly
+Cache-Control: no-cache
+
+*head :created, location: photo_path(@photo)
+
+
+HTTP/1.1 201 Created
+Connection: close
+Date: Sun, 24 Jan 2010 12:16:44 GMT
+Transfer-Encoding: chunked
+Location: /photos/1
+Content-Type: text/html; charset=utf-8
+X-Runtime: 0.083496
+Set-Cookie: _blog_session=...snip...; path=/; HttpOnly
+Cache-Control: no-cache
+
+-Structuring Layouts
+
+Within a layout, you have access to three tools for combining different bits of output to form the overall response:
+
+    Asset tags
+    yield and content_for
+    Partials
+
+->Asset tags
+
+  Asset tag helpers provide methods for generating HTML that link views to feeds, JavaScript, stylesheets, images, videos, and audios
+
+  
+    *auto_discovery_link_tag
+    *javascript_include_tag
+    *stylesheet_link_tag
+    *image_tag
+    *video_tag
+    *audio_tag
+
+-Yield
+
+*Yield identifies a section where content from the view should be inserted
+
+eg:-<html>
+  <head>
+  <%= yield :head %>
+  </head>
+  <body>
+  <%= yield %>
+  </body>
+</html>
+
+->content_for method
+
+ <% content_for :head do %>
+  <title>A simple page</title>
+<% end %>
+ 
+<p>Hello, Rails!</p>
+
+<html>
+  <head>
+  <title>A simple page</title>
+  </head>
+  <body>
+  <p>Hello, Rails!</p>
+  </body>
+</html>
+
+-Using partials
+
+*This will render a file named _menu.html.erb
+<%= render "menu" %>
+
+*That code will pull in the partial from app/views/shared/_menu.html.erb.
+<%= render "shared/menu" %>
+
+->using partials to simplify view
+
+users/index.html.erb
+<%= render "shared/search_filters", search: @q do |f| %>
+  <p>
+    Name contains: <%= f.text_field :name_contains %>
+  </p>
+<% end %>
+
+roles/index.html.erb
+<%= render "shared/search_filters", search: @q do |f| %>
+  <p>
+    Title contains: <%= f.text_field :title_contains %>
+  </p>
+<% end %>
+
+shared/_search_filters.html.erb
+<%= form_for(search) do |f| %>
+  <h1>Search form:</h1>
+  <fieldset>
+    <%= yield f %>
+  </fieldset>
+  <p>
+    <%= f.submit "Search" %>
+  </p>
+<% end %>
+
+->Partial Layouts
+
+*A partial can use its own layout file, just as a view can use a layout. For example, you might call a partial like this:
+<%= render partial: "link_area", layout: "graybar" %>
+
+-Passing local variables
+
+new.html.erb
+<h1>New zone</h1>
+<%= render partial: "form", locals: {zone: @zone} %>
+
+edit.html.erb
+<h1>Editing zone</h1>
+<%= render partial: "form", locals: {zone: @zone} %>
+
+_form.html.erb
+<%= form_for(zone) do |f| %>
+  <p>
+    <b>Zone name</b><br>
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+
+*If you have an instance of a model to render into a partial, you can use a shorthand syntax:
+<%= render @customer %>
+
+-Rendering Collections
+
+*Partials are very useful in rendering collections. When you pass a collection to a partial via the :collection option, the partial will be inserted once for each member in the collection:
+
+    index.html.erb
+    <h1>Products</h1>
+    <%= render partial: "product", collection: @products %>
+
+    _product.html.erb
+    <p>Product Name: <%= product.name %></p>
+
+
+index.html.erb
+<h1>Contacts</h1>
+<%= render [customer1, employee1, customer2, employee2] %>
+
+customers/_customer.html.erb
+<p>Customer: <%= customer.name %></p>
+
+employees/_employee.html.erb
+<p>Employee: <%= employee.name %></p>
+
+*In the event that the collection is empty, render will return nil, so it should be fairly simple to provide alternative content.
+<h1>Products</h1>
+<%= render(@products) || "There are no products available." %>
+
+

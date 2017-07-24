@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'users/index'
+
+  get 'users/show'
+
   resources :employees do
     patch 'check_status', on: :member
     patch 'salary_update', on: :member

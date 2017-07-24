@@ -1,6 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
-
+  layout "users"
   # GET /employees
   # GET /employees.json
   def index
@@ -25,7 +25,6 @@ class EmployeesController < ApplicationController
         @employee = Employee.find(params[:id])
         if params[:active] == "active"
           @employee.update_attributes(active: 1)
-
         else
           @employee.update_attributes(active: 0) 
         end
@@ -40,7 +39,7 @@ class EmployeesController < ApplicationController
     @employee = Employee.find(params[:id])
     salary=@employee.salary+params[:salary].to_i
     @employee.update(salary: salary)
-
+    
   end
   # POST /employees
   # POST /employees.json
