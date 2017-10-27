@@ -11,7 +11,6 @@ git reset   ->remove everything from the staging area
 git commit -m "initial commit"
 git log ->details about the commit
 git <clone> <where to clone> ->cloning a repo OR git clone [url]
-
 git diff ->changes in the repo
 git remote add origin https://github.com/paulabhratanu/df.git
 git push -u origin
@@ -22,3 +21,9 @@ git branch <branch name> ->create another branch
 git checkout tree
 git branch -d <branch name>   ->delete the branch
 
+#steps
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin1 https://github.com/paulabhratanu/Majot-project-2017.git
+git push -u origin1 master

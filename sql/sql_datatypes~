@@ -46,3 +46,16 @@
     ENUM − An enumeration, which is a fancy term for list. When defining an ENUM, you are creating a list of items from which the value must be selected (or it can be NULL). For example, if you wanted your field to contain "A" or "B" or "C", you would define your ENUM as ENUM ('A', 'B', 'C') and only those values (or NULL) could ever populate that field.
 
 
+#constraints
+
+
+
+    NOT NULL - Ensures that a column cannot have a NULL value
+    UNIQUE - Ensures that all values in a column are different
+    PRIMARY KEY - A combination of a NOT NULL and UNIQUE. Uniquely identifies each row in a table
+    FOREIGN KEY - Uniquely identifies a row/record in another table
+    CHECK - Ensures that all values in a column satisfies a specific condition
+    DEFAULT - Sets a default value for a column when no value is specified
+    INDEX - Use to create and retrieve data from the database very quickly
+
+

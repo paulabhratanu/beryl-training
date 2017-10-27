@@ -21,3 +21,15 @@ git branch <branch name> ->create another branch
 git checkout tree
 git branch -d <branch name>   ->delete the branch
 
+#steps
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin1 https://github.com/paulabhratanu/Majot-project-2017.git
+git push -u origin1 master
+
+#rejected error
+
+git fetch origin master:tmp
+git rebase tmp
+git push origin HEAD:master

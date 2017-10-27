@@ -58,4 +58,5 @@
     DEFAULT - Sets a default value for a column when no value is specified
     INDEX - Use to create and retrieve data from the database very quickly
 
+mysql -u root -p jiituniversity
 
